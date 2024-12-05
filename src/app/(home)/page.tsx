@@ -2,9 +2,8 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { InputWithButton } from "@/components/input-with-button";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { CATEGORIES } from "@/lib/constants";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, InfoIcon } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 interface PageProps {
   searchParams: {
@@ -61,6 +60,12 @@ export default function Page({ searchParams }: PageProps) {
               </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {category.items.length === 0 && (
+                  <p className="text-sm flex items-center gap-2">
+                    <InfoIcon className="size-5 inline-block text-orange-500" />{" "}
+                    No agents found in this category.
+                  </p>
+                )}
                 {category.items.map((agent) => (
                   <Link
                     key={agent.name}
