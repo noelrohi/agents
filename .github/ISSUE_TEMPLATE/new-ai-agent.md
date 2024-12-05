@@ -1,7 +1,7 @@
 ---
-name: AI Agent Name
-about: New AI agent details
-title: ''
+name: New AI Agent
+about: Fill in new AI agent details
+title: "[AI Agent Name]"
 labels: ''
 assignees: ''
 
