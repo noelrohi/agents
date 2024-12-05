@@ -1,0 +1,68 @@
+export type Agent = {
+  name: string;
+  description: string;
+  tags: string[];
+  avatar: string;
+  href: string;
+};
+
+export type Category = {
+  id: string;
+  name: string;
+  items: Agent[];
+};
+
+export const CATEGORIES: Category[] = [
+  {
+    id: "video-ai",
+    name: "Video AI",
+    items: [],
+  },
+  {
+    id: "data-analysis",
+    name: "Data Analysis",
+    items: [],
+  },
+  {
+    id: "generative-ui",
+    name: "Generative UI",
+    items: [
+      {
+        name: "v0",
+        description:
+          "Chat with v0. Generate UI with simple text prompts. Copy, paste, ship.",
+        tags: ["design", "ui-generation"],
+        avatar: "https://v0.dev/assets/icon.svg",
+        href: "https://v0.dev",
+      },
+      {
+        name: "bolt",
+        description: "Prompt, run, edit & deploy web apps",
+        tags: ["design", "ui-generation"],
+        avatar: "https://bolt.new/favicon.svg",
+        href: "https://bolt.new",
+      },
+      {
+        name: "lovable",
+        description: "Build software products, using only a chat interface",
+        tags: ["design", "ui-generation"],
+        avatar: "https://lovable.dev/favicon.ico",
+        href: "https://lovable.dev",
+      },
+    ],
+  },
+  {
+    id: "image-generation",
+    name: "Image Generation",
+    items: [
+      {
+        name: "Logo Creator",
+        description:
+          "Create beautiful logos for your brand. Generate logos from text descriptions.",
+        tags: ["logo", "branding"],
+        avatar: "https://www.logo-creator.io/favicon.ico",
+        href: "https://www.logo-creator.io/",
+      },
+    ],
+  },
+];
