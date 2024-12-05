@@ -36,7 +36,7 @@ export default function Page({ searchParams }: PageProps) {
               </Link>
               <Link
                 className="text-sm"
-                href="https://github.com/noelrohi/rohi.dev/issues/new"
+                href="https://github.com/noelrohi/aigent/issues/new"
                 target="_blank"
                 rel="noopener noreferrer"
               >
