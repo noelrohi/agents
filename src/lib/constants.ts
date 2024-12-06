@@ -21,7 +21,15 @@ export const CATEGORIES: Category[] = [
   {
     id: "data-analysis",
     name: "Data Analysis",
-    items: [],
+    items: [
+      {
+        name: "julius.ai",
+        avatar: "https://julius.ai/favicon.ico",
+        href: "https://julius.ai",
+        description: "Analyze your data with computational AI.",
+        tags: ["reports", "insights", "files", "problem solving"],
+      },
+    ],
   },
   {
     id: "generative-ui",
