@@ -79,6 +79,14 @@ export const CATEGORIES: Category[] = [
         avatar: "https://everart.ai/favicon.ico",
         href: "https://everart.ai/",
       },
+      {
+        name: "Picmenu",
+        href: "https://www.picmenu.co/",
+        description:
+          "Take a picture of your menu and get pictures of each dish so you can better decide what to order.",
+        tags: ["menu", "dish"],
+        avatar: "https://www.picmenu.co/favicon.ico",
+      },
     ],
   },
 ];
