@@ -2,22 +2,11 @@ import { CATEGORIES } from "@/lib/constants";
 import { ExternalLink, InfoIcon } from "lucide-react";
 import Link from "next/link";
 
-interface PageProps {
-  searchParams: Promise<{
-    [key: string]: string | string[] | undefined;
-  }>;
-}
-
-export default async function Page({ searchParams }: PageProps) {
-  const categoryId = (await searchParams).category;
-  const categoriesToShow = categoryId
-    ? [CATEGORIES.find((c) => c.id === categoryId)!]
-    : CATEGORIES;
-
+export default function Page() {
   return (
     <main className="flex-1 p-6">
-      {categoriesToShow.map((category) => (
-        <div key={category.id} className="mb-12">
+      {CATEGORIES.map((category) => (
+        <div key={category.id} className="mb-12" id={category.id}>
           <div className="mb-8">
             <h1 className="text-2xl font-semibold font-heading tracking-tight">
               {category.name}

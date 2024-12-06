@@ -1,9 +1,9 @@
 "use client";
 
+import { CATEGORIES } from "@/lib/constants";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -14,16 +14,25 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar";
-import { CATEGORIES } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
   const [searchQuery, setSearchQuery] = useState("");
-  const searchParams = useSearchParams();
-  const currentCategory = searchParams.get("category");
+  const [activeHash, setActiveHash] = useState("");
+  const router = useRouter();
 
-  const filteredCategories = CATEGORIES.filter((category) =>
-    category.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  useEffect(() => {
+    // Set initial hash
+    setActiveHash(window.location.hash.slice(1));
+
+    // Listen for hash changes
+    const handleHashChange = () => {
+      setActiveHash(window.location.hash.slice(1));
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   return (
     <Sidebar>
@@ -42,23 +51,29 @@ export function AppSidebar() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </SidebarMenuItem>
-            {filteredCategories.map((category) => (
+            {CATEGORIES.map((category) => (
               <SidebarMenuItem key={category.id}>
-                <Link href={`/?category=${category.id}`} className="w-full">
-                  <SidebarMenuButton
-                    className="w-full justify-between font-normal"
-                    tooltip={category.name}
-                    isActive={currentCategory === category.id}
-                  >
-                    {category.name}
-                    <span className="text-muted-foreground">
-                      {category.items.length}
-                    </span>
-                  </SidebarMenuButton>
-                </Link>
+                <SidebarMenuButton
+                  onClick={() => {
+                    const element = document.getElementById(category.id);
+                    if (element) {
+                      element.scrollIntoView({ behavior: "smooth" });
+                    }
+                    router.push(`#${category.id}`);
+                    setActiveHash(category.id);
+                  }}
+                  className="w-full justify-between font-normal"
+                  tooltip={category.name}
+                  isActive={activeHash === category.id}
+                >
+                  {category.name}
+                  <span className="text-muted-foreground">
+                    {category.items.length}
+                  </span>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
-            {filteredCategories.length === 0 && (
+            {CATEGORIES.length === 0 && (
               <p className="px-4 text-sm text-muted-foreground">
                 No categories found
               </p>
