@@ -71,6 +71,14 @@ export const CATEGORIES: Category[] = [
         avatar: "https://www.logo-creator.io/favicon.ico",
         href: "https://www.logo-creator.io/",
       },
+      {
+        name: "Everart",
+        description:
+          "Train AI on images of specific products, people or visual aesthetics. Create content like you've never seen before.",
+        tags: ["content", "finetune", "marketing"],
+        avatar: "https://everart.ai/favicon.ico",
+        href: "https://everart.ai/",
+      },
     ],
   },
 ];
