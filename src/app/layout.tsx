@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 const fontSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,12 +29,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${fontSans.variable} ${fontMono.variable} ${fontHeading.variable} font-sans antialiased`}
-        suppressHydrationWarning
       >
-        <main className="min-h-screen bg-background">{children}</main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <main className="min-h-screen bg-background">{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   );
