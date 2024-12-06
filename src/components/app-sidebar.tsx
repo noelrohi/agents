@@ -59,7 +59,7 @@ export function AppSidebar() {
                     if (element) {
                       element.scrollIntoView({ behavior: "smooth" });
                     }
-                    router.push(`#${category.id}`);
+                    router.push(`/#${category.id}`);
                     setActiveHash(category.id);
                   }}
                   className="w-full justify-between font-normal"
