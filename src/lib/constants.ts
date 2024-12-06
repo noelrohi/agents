@@ -74,6 +74,21 @@ export const CATEGORIES: Category[] = [
     name: "Image Generation",
     items: [
       {
+        name: "Midjourney",
+        href: "https://www.midjourney.com/",
+        description:
+          "Independent research lab exploring new mediums of thought and expanding the imaginative powers of the human species.",
+        tags: ["image", "ai"],
+        avatar: "https://www.midjourney.com/apple-touch-icon.png",
+      },
+      {
+        name: "Qreates",
+        href: "https://qreates.com/",
+        description: "High quality product images using AI",
+        tags: ["image", "ai"],
+        avatar: "https://qreates.com/_next/static/media/favicon.0ab139f2.ico",
+      },
+      {
         name: "Logo Creator",
         description:
           "Create beautiful logos for your brand. Generate logos from text descriptions.",
