@@ -6,13 +6,13 @@ import { ExternalLink, InfoIcon } from "lucide-react";
 import Link from "next/link";
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     [key: string]: string | string[] | undefined;
-  };
+  }>;
 }
 
-export default function Page({ searchParams }: PageProps) {
-  const categoryId = searchParams.category;
+export default async function Page({ searchParams }: PageProps) {
+  const categoryId = (await searchParams).category;
   const categoriesToShow = categoryId
     ? [CATEGORIES.find((c) => c.id === categoryId)!]
     : CATEGORIES;
@@ -35,7 +35,7 @@ export default function Page({ searchParams }: PageProps) {
               </Link>
               <Link
                 className="text-sm"
-                href="https://github.com/noelrohi/aigent/issues/new"
+                href="https://github.com/noelrohi/aigent/issues/new?assignees=&labels=&projects=&template=new-ai-agent.md&title=%5BAI+Agent+Name%5D"
                 target="_blank"
                 rel="noopener noreferrer"
               >
