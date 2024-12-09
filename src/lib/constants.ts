@@ -1,18 +1,56 @@
-export type Agent = {
+export interface Agent {
   name: string;
   description: string;
   tags: string[];
   avatar: string;
   href: string;
-};
+}
 
-export type Category = {
+export interface Category {
   id: string;
   name: string;
   items: Agent[];
-};
+}
 
 export const CATEGORIES: Category[] = [
+  {
+    id: "audio-ai",
+    name: "Audio AI",
+    items: [
+      {
+        name: "Eleven Labs",
+        href: "https://elevenlabs.io/",
+        avatar: "https://elevenlabs.io/favicon.ico",
+        description:
+          "Create the most realistic speech with our AI audio tools in 1000s of voices and 32 languages.",
+        tags: ["audio", "speech"],
+      },
+      {
+        name: "wispr flow",
+        href: "https://www.flowvoice.ai/",
+        avatar:
+          "https://cdn.prod.website-files.com/66ebf46fc61e2eda1bea8fda/66f30ae31e454b5365f3ca42_665f41672b93d025709c7085_flow%20logo%201.png",
+        description:
+          "Flow makes writing quick and clear with seamless voice dictation. It is the fastest, smartest way to type with your voice.",
+        tags: ["speaking", "writing"],
+      },
+    ],
+  },
+  {
+    id: "communication",
+    name: "Communication",
+    items: [
+      {
+        name: "HappyRobot",
+        description:
+          "Automate communication across channels with AI workers that integrate with your systems, manage conversations, & log data.",
+        tags: ["communication", "logistics"],
+        avatar:
+          "https://cdn.prod.website-files.com/674779c1e67f9e26af2459eb/674f853da4e68ea635266cf9_favicon.png",
+        href: "https://happyrobot.ai",
+      },
+    ],
+  },
   {
     id: "crawling-ai",
     name: "Crawler",
@@ -46,14 +84,6 @@ export const CATEGORIES: Category[] = [
     name: "Generative UI",
     items: [
       {
-        name: "v0",
-        description:
-          "Chat with v0. Generate UI with simple text prompts. Copy, paste, ship.",
-        tags: ["design", "ui-generation"],
-        avatar: "https://v0.dev/assets/icon.svg",
-        href: "https://v0.dev",
-      },
-      {
         name: "bolt",
         description: "Prompt, run, edit & deploy web apps",
         tags: ["design", "ui-generation"],
@@ -67,6 +97,14 @@ export const CATEGORIES: Category[] = [
         avatar: "https://lovable.dev/favicon.ico",
         href: "https://lovable.dev",
       },
+      {
+        name: "v0",
+        description:
+          "Chat with v0. Generate UI with simple text prompts. Copy, paste, ship.",
+        tags: ["design", "ui-generation"],
+        avatar: "https://v0.dev/assets/icon.svg",
+        href: "https://v0.dev",
+      },
     ],
   },
   {
@@ -74,19 +112,12 @@ export const CATEGORIES: Category[] = [
     name: "Image Generation",
     items: [
       {
-        name: "Midjourney",
-        href: "https://www.midjourney.com/",
+        name: "Everart",
         description:
-          "Independent research lab exploring new mediums of thought and expanding the imaginative powers of the human species.",
-        tags: ["image", "ai"],
-        avatar: "https://www.midjourney.com/apple-touch-icon.png",
-      },
-      {
-        name: "Qreates",
-        href: "https://qreates.com/",
-        description: "High quality product images using AI",
-        tags: ["image", "ai"],
-        avatar: "https://qreates.com/_next/static/media/favicon.0ab139f2.ico",
+          "Train AI on images of specific products, people or visual aesthetics. Create content like you've never seen before.",
+        tags: ["content", "finetune", "marketing"],
+        avatar: "https://everart.ai/favicon.ico",
+        href: "https://everart.ai/",
       },
       {
         name: "Logo Creator",
@@ -97,12 +128,12 @@ export const CATEGORIES: Category[] = [
         href: "https://www.logo-creator.io/",
       },
       {
-        name: "Everart",
+        name: "Midjourney",
+        href: "https://www.midjourney.com/",
         description:
-          "Train AI on images of specific products, people or visual aesthetics. Create content like you've never seen before.",
-        tags: ["content", "finetune", "marketing"],
-        avatar: "https://everart.ai/favicon.ico",
-        href: "https://everart.ai/",
+          "Independent research lab exploring new mediums of thought and expanding the imaginative powers of the human species.",
+        tags: ["image", "ai"],
+        avatar: "https://www.midjourney.com/apple-touch-icon.png",
       },
       {
         name: "Picmenu",
@@ -112,11 +143,28 @@ export const CATEGORIES: Category[] = [
         tags: ["menu", "dish"],
         avatar: "https://www.picmenu.co/favicon.ico",
       },
+      {
+        name: "Qreates",
+        href: "https://qreates.com/",
+        description: "High quality product images using AI",
+        tags: ["image", "ai"],
+        avatar: "https://qreates.com/_next/static/media/favicon.0ab139f2.ico",
+      },
     ],
   },
   {
-    id: "video-ai",
-    name: "Video AI",
-    items: [],
+    id: "memory",
+    name: "Memory",
+    items: [
+      {
+        name: "mem0",
+        href: "https://mem0.ai/",
+        tags: ["memory", "rag"],
+        avatar:
+          "https://framerusercontent.com/images/Ekk9VlcIzXMrrfQS4NHj9fdEKKE.png",
+        description:
+          "Mem0 is a self-improving memory layer for LLM applications, enabling personalized AI experiences that save costs and delight users.",
+      },
+    ],
   },
 ];
