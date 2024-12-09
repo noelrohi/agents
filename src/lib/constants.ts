@@ -153,17 +153,15 @@ export const CATEGORIES: Category[] = [
     ],
   },
   {
-    id: "memory",
-    name: "Memory",
+    name: "Others",
+    id: "others",
     items: [
       {
-        name: "mem0",
-        href: "https://mem0.ai/",
-        tags: ["memory", "rag"],
-        avatar:
-          "https://framerusercontent.com/images/Ekk9VlcIzXMrrfQS4NHj9fdEKKE.png",
-        description:
-          "Mem0 is a self-improving memory layer for LLM applications, enabling personalized AI experiences that save costs and delight users.",
+        name: "DomainsGPT",
+        href: "https://oneword.domains/domains-gpt",
+        description: "Generate domains with AI",
+        tags: ["domains", "ai"],
+        avatar: "https://oneword.domains/logo.png",
       },
     ],
   },
