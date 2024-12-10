@@ -80,6 +80,37 @@ export const CATEGORIES: Category[] = [
     ],
   },
   {
+    id: "development",
+    name: "Development",
+    items: [
+      {
+        name: "cursor",
+        description:
+          "AI-first code editor that helps you code smarter and faster",
+        tags: ["code", "editor", "ai"],
+        avatar: "https://cursor.sh/favicon.ico",
+        href: "https://cursor.sh",
+      },
+      {
+        name: "midscene.js",
+        description:
+          "Transform UI automation into a joyful experience with Midscene.js, enabling seamless interaction, querying, and assertions through natural language",
+        tags: ["automation", "ui", "ai"],
+        avatar: "https://midscenejs.com/midscene-icon.png",
+        href: "https://midscenejs.com",
+      },
+      {
+        name: "keak",
+        description:
+          "Boost your website's conversion rates. Generate variations, track performance, and achieve statistically significant results.",
+        tags: ["a/b testing", "analytics", "optimization"],
+        avatar:
+          "https://framerusercontent.com/images/7O25asSN8XNyGB2KZM1hjlOLpBU.png",
+        href: "https://keak.com",
+      },
+    ],
+  },
+  {
     id: "generative-ui",
     name: "Generative UI",
     items: [
@@ -162,6 +193,20 @@ export const CATEGORIES: Category[] = [
         description: "Generate domains with AI",
         tags: ["domains", "ai"],
         avatar: "https://oneword.domains/logo.png",
+      },
+    ],
+  },
+  {
+    id: "video",
+    name: "Video",
+    items: [
+      {
+        name: "Sora",
+        href: "https://sora.com",
+        description:
+          "Transform text and images into immersive videos. Animate stories, visualize ideas, and bring your concepts to life.",
+        tags: ["video", "ai"],
+        avatar: "https://openai.com/favicon.ico",
       },
     ],
   },
