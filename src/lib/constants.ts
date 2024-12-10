@@ -194,6 +194,14 @@ export const CATEGORIES: Category[] = [
         tags: ["domains", "ai"],
         avatar: "https://oneword.domains/logo.png",
       },
+      {
+        name: "Strategy Connect",
+        href: "https://strategyconnect.co",
+        description:
+          "StrategyConnect provides on-demand access to top-tier consultants and industry experts across the Middle East.",
+        tags: ["consulting", "talent"],
+        avatar: "https://strategyconnect.co/favicon.ico",
+      },
     ],
   },
   {
