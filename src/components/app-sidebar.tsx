@@ -3,7 +3,7 @@
 import { CATEGORIES } from "@/lib/constants";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -20,6 +20,22 @@ export function AppSidebar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeHash, setActiveHash] = useState("");
   const router = useRouter();
+
+  const filteredItems = useMemo(() => {
+    return CATEGORIES.flatMap((category) => category.items).filter((item) => {
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        item.name.toLowerCase().includes(searchLower) ||
+        item.tags.some((tag) => tag.toLowerCase().includes(searchLower))
+      );
+    });
+  }, [searchQuery]);
+
+  const filteredCategories = useMemo(() => {
+    return CATEGORIES.filter((category) => {
+      return category.items.some((item) => filteredItems.includes(item));
+    });
+  }, [filteredItems]);
 
   useEffect(() => {
     // Set initial hash
@@ -45,13 +61,13 @@ export function AppSidebar() {
             <SidebarMenuItem className="relative mb-2">
               <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <SidebarInput
-                placeholder="Search..."
+                placeholder="Search tags, categories..."
                 className="pl-9"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </SidebarMenuItem>
-            {CATEGORIES.map((category) => (
+            {filteredCategories.map((category) => (
               <SidebarMenuItem key={category.id}>
                 <SidebarMenuButton
                   onClick={() => {
@@ -73,7 +89,7 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
-            {CATEGORIES.length === 0 && (
+            {filteredCategories.length === 0 && (
               <p className="px-4 text-sm text-muted-foreground">
                 No categories found
               </p>

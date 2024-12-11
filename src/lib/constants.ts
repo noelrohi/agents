@@ -84,6 +84,21 @@ export const CATEGORIES: Category[] = [
     name: "Development",
     items: [
       {
+        name: "devin",
+        description: "Your reliable AI software engineer",
+        tags: ["development", "ai", "coding"],
+        avatar: "https://app.devin.ai/favicon.ico",
+        href: "https://app.devin.ai",
+      },
+      {
+        name: "warp",
+        description:
+          "Warp is the intelligent terminal with AI and your dev team's knowledge built-in. Available now on MacOS and Linux.",
+        tags: ["terminal", "development", "ai"],
+        avatar: "https://warp.dev/favicon.png",
+        href: "https://warp.dev",
+      },
+      {
         name: "cursor",
         description:
           "AI-first code editor that helps you code smarter and faster",
@@ -167,6 +182,14 @@ export const CATEGORIES: Category[] = [
         avatar: "https://www.midjourney.com/apple-touch-icon.png",
       },
       {
+        name: "runware.ai",
+        description:
+          "Ultra-fast, lowest-cost generative media. Powered by custom hardware and renewable energy.",
+        tags: ["image", "generative", "media"],
+        avatar: "https://runware.ai/favicon/favicon-96x96.png",
+        href: "https://runware.ai/",
+      },
+      {
         name: "Picmenu",
         href: "https://www.picmenu.co/",
         description:
@@ -187,6 +210,15 @@ export const CATEGORIES: Category[] = [
     name: "Others",
     id: "others",
     items: [
+      {
+        name: "LM Arena",
+        href: "https://lmarena.ai/",
+        description:
+          "Chatbot Arena (formerly LMSYS): Free AI Chat to Compare & Test Best AI Chatbots",
+        tags: ["chatbot", "ai", "comparison"],
+        avatar:
+          "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://lmarena.ai&size=256",
+      },
       {
         name: "DomainsGPT",
         href: "https://oneword.domains/domains-gpt",
