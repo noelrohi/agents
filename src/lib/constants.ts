@@ -34,6 +34,15 @@ export const CATEGORIES: Category[] = [
           "Flow makes writing quick and clear with seamless voice dictation. It is the fastest, smartest way to type with your voice.",
         tags: ["speaking", "writing"],
       },
+      {
+        name: "shortcut",
+        href: "https://www.poised.com/shortcut",
+        description:
+          "No more typing, just natural conversation. Get instant answers, turn your thoughts into solutions, and draft messages, emails, and docs in seconds —all while staying in your flow.",
+        avatar:
+          "https://cdn.prod.website-files.com/623ca68edd1e7fcbf0efec7d/6264e87b6f6a5086efb90f5e_favicon-32x32.png",
+        tags: ["speaking", "writing", "ai"],
+      },
     ],
   },
   {
@@ -80,8 +89,8 @@ export const CATEGORIES: Category[] = [
     ],
   },
   {
-    id: "development",
-    name: "Development",
+    id: "developer-tools",
+    name: "Developer Tools",
     items: [
       {
         name: "devin",
@@ -122,6 +131,14 @@ export const CATEGORIES: Category[] = [
         avatar:
           "https://framerusercontent.com/images/7O25asSN8XNyGB2KZM1hjlOLpBU.png",
         href: "https://keak.com",
+      },
+      {
+        name: "coderabbit",
+        description:
+          "AI-powered code review assistant that helps teams ship better code faster",
+        tags: ["code-review", "git", "automation"],
+        avatar: "https://coderabbit.ai/favicon.ico",
+        href: "https://coderabbit.ai",
       },
     ],
   },
@@ -234,6 +251,19 @@ export const CATEGORIES: Category[] = [
         tags: ["consulting", "talent"],
         avatar: "https://strategyconnect.co/favicon.ico",
       },
+      {
+        name: "bold voice",
+        href: "https://start.boldvoice.com/accent-guesser",
+        description: "Guess the accent of a voice",
+        tags: [
+          "pronunciation",
+          "language learning",
+          "ai feedback",
+          "accent training",
+        ],
+        avatar:
+          "https://cdn.prod.website-files.com/60fcddc4d806aae485f642fb/64449fbc6a788fa5bf224640_favicon32v2.png",
+      },
     ],
   },
   {
@@ -247,6 +277,15 @@ export const CATEGORIES: Category[] = [
           "Transform text and images into immersive videos. Animate stories, visualize ideas, and bring your concepts to life.",
         tags: ["video", "ai"],
         avatar: "https://openai.com/favicon.ico",
+      },
+      {
+        name: "Zebracat",
+        description:
+          "Level up your video game with our AI video generator. Utilize powerful AI technology to produce eye-catching videos in minutes with Zebracat.",
+        tags: ["video", "ai", "generator"],
+        avatar:
+          "https://cdn.prod.website-files.com/653c03c7c53a2bcd281722c6/65eed56bb67ec56a8456f152_fav.png",
+        href: "https://www.zebracat.ai/",
       },
     ],
   },
