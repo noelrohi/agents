@@ -1,8 +1,9 @@
 "use client";
 
-import { CATEGORIES } from "@/lib/constants";
+import { AGENT_CATEGORIES, TOOLS_CATEGORIES } from "@/lib/constants";
 import { Search } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
   Sidebar,
@@ -14,12 +15,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar";
-import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeHash, setActiveHash] = useState("");
   const router = useRouter();
+  const pathname = usePathname();
+
+  const CATEGORIES = pathname === "/" ? AGENT_CATEGORIES : TOOLS_CATEGORIES;
 
   const filteredItems = useMemo(() => {
     return CATEGORIES.flatMap((category) => category.items).filter((item) => {
@@ -29,13 +32,13 @@ export function AppSidebar() {
         item.tags.some((tag) => tag.toLowerCase().includes(searchLower))
       );
     });
-  }, [searchQuery]);
+  }, [searchQuery, pathname]);
 
   const filteredCategories = useMemo(() => {
     return CATEGORIES.filter((category) => {
       return category.items.some((item) => filteredItems.includes(item));
     });
-  }, [filteredItems]);
+  }, [filteredItems, pathname]);
 
   useEffect(() => {
     // Set initial hash
@@ -75,7 +78,7 @@ export function AppSidebar() {
                     if (element) {
                       element.scrollIntoView({ behavior: "smooth" });
                     }
-                    router.push(`/#${category.id}`);
+                    router.push(`${pathname}#${category.id}`);
                     setActiveHash(category.id);
                   }}
                   className="w-full justify-between font-normal"

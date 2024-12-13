@@ -12,7 +12,29 @@ export interface Category {
   items: Agent[];
 }
 
-export const CATEGORIES: Category[] = [
+export const TOOLS_CATEGORIES: Category[] = [
+  {
+    id: "agent-framework",
+    name: "Agent Framework",
+    items: [
+      {
+        name: "julep.ai",
+        description:
+          "Backend for building AI agent workflows. A new DSL for building tasks and a server for running them. Allows companie so build and deploy AI pipelines in minues.",
+        tags: ["agent", "workflow", "backend", "dsl"],
+        avatar:
+          "https://framerusercontent.com/images/lNddinFQ0DkoJDrlH9txWu6eqY.png",
+        href: "https://julep.ai",
+      },
+      {
+        name: "eliza",
+        description: "Flexible, scalable AI agents for everyone",
+        tags: ["agent", "framework", "ai"],
+        avatar: "https://ai16z.github.io/eliza/img/favicon.ico",
+        href: "https://ai16z.github.io/eliza/",
+      },
+    ],
+  },
   {
     id: "audio-ai",
     name: "Audio AI",
@@ -92,13 +114,6 @@ export const CATEGORIES: Category[] = [
     id: "developer-tools",
     name: "Developer Tools",
     items: [
-      {
-        name: "devin",
-        description: "Your reliable AI software engineer",
-        tags: ["development", "ai", "coding"],
-        avatar: "https://app.devin.ai/favicon.ico",
-        href: "https://app.devin.ai",
-      },
       {
         name: "warp",
         description:
@@ -244,14 +259,6 @@ export const CATEGORIES: Category[] = [
         avatar: "https://oneword.domains/logo.png",
       },
       {
-        name: "Strategy Connect",
-        href: "https://strategyconnect.co",
-        description:
-          "StrategyConnect provides on-demand access to top-tier consultants and industry experts across the Middle East.",
-        tags: ["consulting", "talent"],
-        avatar: "https://strategyconnect.co/favicon.ico",
-      },
-      {
         name: "bold voice",
         href: "https://start.boldvoice.com/accent-guesser",
         description: "Guess the accent of a voice",
@@ -288,5 +295,109 @@ export const CATEGORIES: Category[] = [
         href: "https://www.zebracat.ai/",
       },
     ],
+  },
+];
+
+export const AI_AGENTS: Agent[] = [
+  {
+    name: "devin",
+    description: "Your reliable AI software engineer",
+    tags: ["development", "ai", "coding"],
+    avatar: "https://app.devin.ai/favicon.ico",
+    href: "https://app.devin.ai",
+  },
+  {
+    name: "HappyRobot",
+    description:
+      "Automate communication across channels with AI workers that integrate with your systems, manage conversations, & log data.",
+    tags: ["communication", "logistics"],
+    avatar:
+      "https://cdn.prod.website-files.com/674779c1e67f9e26af2459eb/674f853da4e68ea635266cf9_favicon.png",
+    href: "https://happyrobot.ai",
+  },
+  {
+    name: "Marvin - Strategy Connect",
+    href: "https://marvin.strategyconnect.co/?mode=try-marvin",
+    description:
+      "Marvin is a strategy consultant that helps you solve complex problems and make better decisions.",
+    tags: ["consulting", "talent"],
+    avatar: "https://strategyconnect.co/favicon.ico",
+  },
+  {
+    name: "Wren AI",
+    description:
+      "Open-source SQL AI Agent for data teams to get results and insights faster by asking business questions without writing SQL. Supports BigQuery, DuckDB, PostgreSQL, JSON, Parquet, CSV, MySQL, MS SQL, ClickHouse, Excel, Google Sheet, and Trino.",
+    tags: ["sql", "data", "analytics", "open-source"],
+    avatar:
+      "https://cdn.prod.website-files.com/65e9b9dd95692faa9f5bb1c0/65f9b1f91189e69786ecd34a_webclip.png",
+    href: "https://getwren.ai/oss",
+  },
+];
+
+export const AGENT_CATEGORIES = [
+  {
+    id: "consulting",
+    name: "Consulting",
+    items: [
+      {
+        name: "Marvin - Strategy Connect",
+        href: "https://marvin.strategyconnect.co/?mode=try-marvin",
+        description:
+          "Marvin is a strategy consultant that helps you solve complex problems and make better decisions.",
+        tags: ["consulting", "talent"],
+        avatar: "https://strategyconnect.co/favicon.ico",
+      },
+    ],
+  },
+  {
+    id: "development",
+    name: "Development",
+    items: [
+      {
+        name: "devin",
+        description: "Your reliable AI software engineer",
+        tags: ["development", "ai", "coding"],
+        avatar: "https://app.devin.ai/favicon.ico",
+        href: "https://app.devin.ai",
+      },
+    ],
+  },
+  {
+    id: "operations",
+    name: "Operations",
+    items: [
+      {
+        name: "HappyRobot",
+        description:
+          "Automate communication across channels with AI workers that integrate with your systems, manage conversations, & log data.",
+        tags: ["communication", "logistics"],
+        avatar:
+          "https://cdn.prod.website-files.com/674779c1e67f9e26af2459eb/674f853da4e68ea635266cf9_favicon.png",
+        href: "https://happyrobot.ai",
+      },
+    ],
+  },
+  {
+    id: "crypto",
+    name: "Crypto & Trading",
+    items: [
+      {
+        name: "AIXBT",
+        description:
+          "Automated trading agent that analyzes market data and shares crypto trading insights on Twitter.",
+        tags: ["crypto", "trading", "automation", "twitter"],
+        avatar: "https://aixbt.tech/favicon.ico",
+        href: "https://twitter.com/aixbt_agent",
+      },
+      {
+        name: "RopAIrito",
+        description:
+          "AI agent built with Eliza framework that analyzes market data and shares crypto trading insights on Twitter.",
+        tags: ["crypto", "trading", "eliza", "twitter"],
+        avatar:
+          "https://pbs.twimg.com/profile_images/1767947897332908032/Aq_Hs_Ue_400x400.jpg",
+        href: "https://twitter.com/ropAIrito",
+      },
+    ], // Ready for future crypto trading agents
   },
 ];
