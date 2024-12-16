@@ -33,6 +33,22 @@ export const TOOLS_CATEGORIES: Category[] = [
         avatar: "https://ai16z.github.io/eliza/img/favicon.ico",
         href: "https://ai16z.github.io/eliza/",
       },
+      {
+        name: "crew.ai",
+        description: "Get things done with the help of AI agents",
+        tags: ["agent", "framework", "productivity", "automation"],
+        avatar: "https://crew.ai/agent.ai-gear/favicon/favicon.ico",
+        href: "https://crew.ai/",
+      },
+      {
+        name: "phidata",
+        description:
+          "An open-source platform to build, ship and monitor agentic systems.",
+        tags: ["agent", "framework", "open-source", "monitoring", "platform"],
+        avatar:
+          "https://cdn.prod.website-files.com/66e0d4ef58ba78f56e23564e/670f0d0a54d0060dbe609d39_Favicon%20small%20(1).ico",
+        href: "https://www.phidata.com/",
+      },
     ],
   },
   {
@@ -296,41 +312,20 @@ export const TOOLS_CATEGORIES: Category[] = [
       },
     ],
   },
-];
-
-export const AI_AGENTS: Agent[] = [
   {
-    name: "devin",
-    description: "Your reliable AI software engineer",
-    tags: ["development", "ai", "coding"],
-    avatar: "https://app.devin.ai/favicon.ico",
-    href: "https://app.devin.ai",
-  },
-  {
-    name: "HappyRobot",
-    description:
-      "Automate communication across channels with AI workers that integrate with your systems, manage conversations, & log data.",
-    tags: ["communication", "logistics"],
-    avatar:
-      "https://cdn.prod.website-files.com/674779c1e67f9e26af2459eb/674f853da4e68ea635266cf9_favicon.png",
-    href: "https://happyrobot.ai",
-  },
-  {
-    name: "Marvin - Strategy Connect",
-    href: "https://marvin.strategyconnect.co/?mode=try-marvin",
-    description:
-      "Marvin is a strategy consultant that helps you solve complex problems and make better decisions.",
-    tags: ["consulting", "talent"],
-    avatar: "https://strategyconnect.co/favicon.ico",
-  },
-  {
-    name: "Wren AI",
-    description:
-      "Open-source SQL AI Agent for data teams to get results and insights faster by asking business questions without writing SQL. Supports BigQuery, DuckDB, PostgreSQL, JSON, Parquet, CSV, MySQL, MS SQL, ClickHouse, Excel, Google Sheet, and Trino.",
-    tags: ["sql", "data", "analytics", "open-source"],
-    avatar:
-      "https://cdn.prod.website-files.com/65e9b9dd95692faa9f5bb1c0/65f9b1f91189e69786ecd34a_webclip.png",
-    href: "https://getwren.ai/oss",
+    id: "memory",
+    name: "Memory",
+    items: [
+      {
+        name: "Mem0",
+        description:
+          "Mem0 is a self-improving memory layer for LLM applications, enabling personalized AI experiences that save costs and delight users.",
+        tags: ["memory", "llm", "personalization", "ai-infrastructure"],
+        avatar:
+          "https://framerusercontent.com/images/Ekk9VlcIzXMrrfQS4NHj9fdEKKE.png",
+        href: "https://mem0.ai/",
+      },
+    ],
   },
 ];
 
@@ -359,6 +354,20 @@ export const AGENT_CATEGORIES = [
         tags: ["development", "ai", "coding"],
         avatar: "https://app.devin.ai/favicon.ico",
         href: "https://app.devin.ai",
+      },
+      {
+        name: "Dosu",
+        description:
+          "Dosu is an AI teammate that acts as the first line of defense against incoming issues and tedious tasks.",
+        tags: [
+          "development",
+          "github",
+          "automation",
+          "issue-management",
+          "code-review",
+        ],
+        avatar: "https://dosu.dev/favicon.ico",
+        href: "https://dosu.dev/",
       },
     ],
   },
@@ -399,5 +408,39 @@ export const AGENT_CATEGORIES = [
         href: "https://twitter.com/ropAIrito",
       },
     ], // Ready for future crypto trading agents
+  },
+  {
+    id: "customer-service",
+    name: "Customer Service",
+    items: [
+      {
+        name: "Sierra",
+        description:
+          "Elevate your customer experience with conversational AI tailored to your business. Designed with the highest commitment to security, compliance, and trust.",
+        tags: [
+          "communication",
+          "customer-service",
+          "conversational-ai",
+          "security",
+        ],
+        avatar: "https://sierra.ai/icon.png",
+        href: "https://sierra.ai",
+      },
+    ],
+  },
+  {
+    id: "data-analytics",
+    name: "Data & Analytics",
+    items: [
+      {
+        name: "Wren AI",
+        description:
+          "Open-source SQL AI Agent for data teams to get results and insights faster by asking business questions without writing SQL. Supports BigQuery, DuckDB, PostgreSQL, JSON, Parquet, CSV, MySQL, MS SQL, ClickHouse, Excel, Google Sheet, and Trino.",
+        tags: ["sql", "data", "analytics", "open-source"],
+        avatar:
+          "https://cdn.prod.website-files.com/65e9b9dd95692faa9f5bb1c0/65f9b1f91189e69786ecd34a_webclip.png",
+        href: "https://getwren.ai/oss",
+      },
+    ],
   },
 ];
