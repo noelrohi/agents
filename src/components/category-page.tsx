@@ -1,31 +1,98 @@
-import { CategoryGroup } from "@/data";
-import { ExternalLink, InfoIcon } from "lucide-react";
-import Link from "next/link";
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { CategoryGroup } from "@/data";
+import { ExternalLink, InfoIcon, Search, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
+  const [search, setSearch] = useState("");
+
+  // Create a "New" category with items from the last 24 hours
+  const now = performance.now();
+  const oneDayAgo = now - 24 * 60 * 60 * 1000;
+
+  const allItems = categories.flatMap((category) =>
+    category.items.map((item) => ({
+      ...item,
+      categoryName: category.name,
+    })),
+  );
+
+  const newItems = allItems.filter((item) => {
+    const createdAt = new Date(item.createdAt).getTime();
+    return createdAt >= oneDayAgo;
+  });
+
+  const newCategory: CategoryGroup = {
+    id: "new",
+    name: "New Arrivals",
+    items: newItems,
+  };
+
+  // Filter categories and their items based on search
+  const filteredCategories = [
+    ...(newItems.length > 0 ? [newCategory] : []),
+    ...categories.map((category) => ({
+      ...category,
+      items: category.items.filter((item) => {
+        const searchLower = search.toLowerCase();
+        return (
+          // Search in name
+          item.name.toLowerCase().includes(searchLower) ||
+          // Search in description
+          item.description.toLowerCase().includes(searchLower) ||
+          // Search in category
+          category.name.toLowerCase().includes(searchLower) ||
+          // Search in tags
+          JSON.parse(item.tags).some((tag: string) =>
+            tag.toLowerCase().includes(searchLower),
+          )
+        );
+      }),
+    })),
+  ].filter((category) => category.items.length > 0);
+
   return (
     <main className="flex-1 p-6">
-      {categories.map((category) => (
+      <div className="mb-8">
+        <div className="relative max-w-lg mb-8">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search by name, description, category, or tags..."
+            className="pl-10"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        {filteredCategories.length === 0 && search && (
+          <p className="text-sm flex items-center gap-2">
+            <InfoIcon className="size-5 inline-block text-orange-500" />
+            No results found for "{search}".
+          </p>
+        )}
+      </div>
+
+      {filteredCategories.map((category) => (
         <div key={category.id} className="mb-12" id={category.id}>
           <div className="mb-8">
-            <h1 className="text-2xl font-semibold font-heading tracking-tight">
+            <h1 className="text-2xl font-semibold font-heading tracking-tight flex items-center gap-2">
               {category.name.charAt(0).toUpperCase() +
                 category.name.slice(1).replace("-", " ")}
+              {category.id === "new" && (
+                <Sparkles className="h-5 w-5 text-yellow-500" />
+              )}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Explore the best {category.name.toLowerCase()} tools and
-              platforms.
+              {category.id === "new"
+                ? "Discover the latest additions from the past 24 hours"
+                : `Explore the best ${category.name.toLowerCase()} tools and platforms.`}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {category.items.length === 0 && (
-              <p className="text-sm flex items-center gap-2">
-                <InfoIcon className="size-5 inline-block text-orange-500" /> No
-                tools found in this category.
-              </p>
-            )}
             {category.items.map((agent) => (
               <Link
                 key={agent.name}
@@ -56,9 +123,9 @@ export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
                             {tag}
                           </span>
                         ))}
-                      {agent.tags.length > 2 && (
+                      {JSON.parse(agent.tags).length > 2 && (
                         <span className="text-xs text-muted-foreground">
-                          +{agent.tags.length - 2} more
+                          +{JSON.parse(agent.tags).length - 2} more
                         </span>
                       )}
                     </div>

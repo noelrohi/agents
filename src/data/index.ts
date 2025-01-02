@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { items } from "@/db/schema";
+import { UTCDate } from "@date-fns/utc";
 import { eq, sql } from "drizzle-orm";
 import { unstable_cacheLife as cacheLife } from "next/cache";
 
@@ -9,6 +10,7 @@ interface CategoryItem {
   tags: string;
   avatar: string | null;
   href: string;
+  createdAt: string;
 }
 
 export interface CategoryGroup {
@@ -37,7 +39,8 @@ export async function getCategorizedItems(
         'description', ${items.description},
         'tags', ${items.tags},
         'avatar', ${items.avatar},
-        'href', ${items.href}
+        'href', ${items.href},
+        'createdAt', ${items.createdAt}
       )
     )`.as("items"),
     })
@@ -47,11 +50,27 @@ export async function getCategorizedItems(
     .orderBy(items.category)
     .execute();
 
-  return result.map(
+  const now = new UTCDate();
+  const itemResults = result.flatMap(
+    (row) => JSON.parse(row.items) as CategoryItem[],
+  );
+
+  const newCategory: CategoryGroup = {
+    id: "new",
+    name: "New Arrivals",
+    items: itemResults.filter((item) => {
+      const createdAt = new UTCDate(item.createdAt).getTime();
+      return createdAt >= now.getTime();
+    }),
+  };
+
+  const categoryGroups = result.map(
     (row): CategoryGroup => ({
       id: row.category,
       name: row.category,
       items: JSON.parse(row.items) as CategoryItem[],
     }),
   );
+
+  return [newCategory, ...categoryGroups];
 }
