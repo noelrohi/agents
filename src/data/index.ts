@@ -2,7 +2,6 @@ import { db } from "@/db";
 import { items } from "@/db/schema";
 import { UTCDate } from "@date-fns/utc";
 import { eq, sql } from "drizzle-orm";
-import { unstable_cacheLife as cacheLife } from "next/cache";
 
 interface CategoryItem {
   name: string;
@@ -25,11 +24,6 @@ export async function getCategorizedItems(
   type: ItemType,
 ): Promise<CategoryGroup[]> {
   "use cache";
-  cacheLife({
-    stale: 3600, // 1 hour
-    revalidate: 900, // 15 minutes
-    expire: 86400, // 1 day
-  });
   const result = await db
     .select({
       category: items.category,
@@ -59,6 +53,7 @@ export async function getCategorizedItems(
     id: "new",
     name: "New Arrivals",
     items: itemResults.filter((item) => {
+      console.log(new UTCDate(item.createdAt), now);
       const createdAt = new UTCDate(item.createdAt).getTime();
       return createdAt >= now.getTime();
     }),
@@ -71,6 +66,8 @@ export async function getCategorizedItems(
       items: JSON.parse(row.items) as CategoryItem[],
     }),
   );
-
-  return [newCategory, ...categoryGroups];
+  if (newCategory.items.length > 0) {
+    return [newCategory, ...categoryGroups];
+  }
+  return categoryGroups;
 }

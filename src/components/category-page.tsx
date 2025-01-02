@@ -10,50 +10,24 @@ import { useState } from "react";
 export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
   const [search, setSearch] = useState("");
 
-  // Create a "New" category with items from the last 24 hours
-  const now = performance.now();
-  const oneDayAgo = now - 24 * 60 * 60 * 1000;
-
-  const allItems = categories.flatMap((category) =>
-    category.items.map((item) => ({
-      ...item,
-      categoryName: category.name,
-    })),
-  );
-
-  const newItems = allItems.filter((item) => {
-    const createdAt = new Date(item.createdAt).getTime();
-    return createdAt >= oneDayAgo;
-  });
-
-  const newCategory: CategoryGroup = {
-    id: "new",
-    name: "New Arrivals",
-    items: newItems,
-  };
-
-  // Filter categories and their items based on search
-  const filteredCategories = [
-    ...(newItems.length > 0 ? [newCategory] : []),
-    ...categories.map((category) => ({
-      ...category,
-      items: category.items.filter((item) => {
-        const searchLower = search.toLowerCase();
-        return (
-          // Search in name
-          item.name.toLowerCase().includes(searchLower) ||
-          // Search in description
-          item.description.toLowerCase().includes(searchLower) ||
-          // Search in category
-          category.name.toLowerCase().includes(searchLower) ||
-          // Search in tags
-          JSON.parse(item.tags).some((tag: string) =>
-            tag.toLowerCase().includes(searchLower),
-          )
-        );
-      }),
-    })),
-  ].filter((category) => category.items.length > 0);
+  const filteredCategories = categories.map((category) => ({
+    ...category,
+    items: category.items.filter((item) => {
+      const searchLower = search.toLowerCase();
+      return (
+        // Search in name
+        item.name.toLowerCase().includes(searchLower) ||
+        // Search in description
+        item.description.toLowerCase().includes(searchLower) ||
+        // Search in category
+        category.name.toLowerCase().includes(searchLower) ||
+        // Search in tags
+        JSON.parse(item.tags).some((tag: string) =>
+          tag.toLowerCase().includes(searchLower),
+        )
+      );
+    }),
+  }));
 
   return (
     <main className="flex-1 p-6">
