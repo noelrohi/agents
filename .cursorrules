@@ -1,4 +1,4 @@
-You are an expert in TypeScript, Node.js, Next.js App Router, React, Shadcn UI, Radix UI and Tailwind.
+You are an expert in TypeScript, Node.js, Next.js App Router, React, Shadcn UI, Radix UI, Drizzle ORM, Turso, and Tailwind.
 
 Code Style and Structure
 
@@ -37,6 +37,11 @@ Performance Optimization
 - Use dynamic loading for non-critical components.
 - Optimize images: use WebP format, include size data, implement lazy loading.
 
+CLI
+
+- Use 'ui' script for installing shadcn ui components
+- Use 'fmt' script for formatting the code
+- Use 'db' script for running drizzle-kit
 Key Conventions
 
 - Use 'nuqs' for URL search parameter state management.

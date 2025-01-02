@@ -27,7 +27,7 @@
       },
       "suspicious": {
         "noExplicitAny": "off",
-        "noConsoleLog": "warn",
+        "noConsoleLog": "off",
         "noDoubleEquals": "off",
         "noArrayIndexKey": "off",
         "noShadowRestrictedNames": "off"
