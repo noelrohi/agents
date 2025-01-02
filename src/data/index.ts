@@ -3,6 +3,7 @@ import { items } from "@/db/schema";
 import { UTCDate } from "@date-fns/utc";
 import { eq, sql } from "drizzle-orm";
 import { isSameDay } from "date-fns";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 interface CategoryItem {
   name: string;
@@ -24,6 +25,8 @@ type ItemType = "agent" | "tool";
 export async function getCategorizedItems(
   type: ItemType,
 ): Promise<CategoryGroup[]> {
+  "use cache";
+  cacheTag("items");
   const result = await db
     .select({
       category: items.category,
@@ -44,7 +47,7 @@ export async function getCategorizedItems(
     .orderBy(items.category)
     .execute();
 
-  const now = new UTCDate();
+  const now = new UTCDate(new UTCDate().getTime() + 1000 * 60 * 60 * 24);
   const yesterday = new UTCDate(now.getTime() - 24 * 60 * 60 * 1000);
   const itemResults = result.flatMap(
     (row) => JSON.parse(row.items) as CategoryItem[],

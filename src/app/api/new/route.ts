@@ -3,6 +3,7 @@ import { items } from "@/db/schema";
 import { withUnkey } from "@unkey/nextjs";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { unstable_expireTag as expireTag } from "next/cache";
 
 const newItemSchema = createInsertSchema(items, {
   tags: z.array(z.string()),
@@ -22,6 +23,7 @@ export const POST = withUnkey(
       const parsedBody = newItemSchema.parse(body);
       const newItem = await db.insert(items).values(parsedBody).returning();
 
+      expireTag("items");
       return Response.json(newItem);
     } catch (error) {
       console.error(error);
