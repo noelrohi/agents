@@ -45,6 +45,7 @@ export async function getCategorizedItems(
     .execute();
 
   const now = new UTCDate();
+  const yesterday = new UTCDate(now.getTime() - 24 * 60 * 60 * 1000);
   const itemResults = result.flatMap(
     (row) => JSON.parse(row.items) as CategoryItem[],
   );
@@ -53,9 +54,9 @@ export async function getCategorizedItems(
     id: "new",
     name: "New Arrivals",
     items: itemResults.filter((item) => {
-      console.log(new UTCDate(item.createdAt), now);
+      console.log(new UTCDate(item.createdAt), now, item.name);
       const createdAt = new UTCDate(item.createdAt).getTime();
-      return createdAt >= now.getTime();
+      return createdAt >= yesterday.getTime();
     }),
   };
 
