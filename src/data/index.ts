@@ -66,8 +66,5 @@ export async function getCategorizedItems(
       items: JSON.parse(row.items) as CategoryItem[],
     }),
   );
-  if (newCategory.items.length > 0) {
-    return [newCategory, ...categoryGroups];
-  }
-  return categoryGroups;
+  return [newCategory, ...categoryGroups];
 }
