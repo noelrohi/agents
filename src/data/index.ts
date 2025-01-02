@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { items } from "@/db/schema";
 import { UTCDate } from "@date-fns/utc";
 import { eq, sql } from "drizzle-orm";
+import { isSameDay } from "date-fns";
 
 interface CategoryItem {
   name: string;
@@ -23,7 +24,6 @@ type ItemType = "agent" | "tool";
 export async function getCategorizedItems(
   type: ItemType,
 ): Promise<CategoryGroup[]> {
-  "use cache";
   const result = await db
     .select({
       category: items.category,
@@ -56,7 +56,7 @@ export async function getCategorizedItems(
     items: itemResults.filter((item) => {
       console.log(new UTCDate(item.createdAt), now, item.name);
       const createdAt = new UTCDate(item.createdAt).getTime();
-      return createdAt >= yesterday.getTime();
+      return isSameDay(createdAt, yesterday) || isSameDay(createdAt, now);
     }),
   };
 
