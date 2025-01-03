@@ -12,6 +12,7 @@
     "trigger": "pnpm dlx trigger.dev@latest"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.0.12",
     "@date-fns/utc": "^2.1.0",
     "@libsql/client": "^0.14.0",
     "@radix-ui/react-avatar": "^1.1.2",
@@ -27,6 +28,7 @@
     "@t3-oss/env-nextjs": "^0.11.1",
     "@trigger.dev/sdk": "^3.3.7",
     "@unkey/nextjs": "^0.18.3",
+    "ai": "^4.0.23",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

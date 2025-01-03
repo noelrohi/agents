@@ -20,7 +20,7 @@ export const POST = withUnkey(
     }
     try {
       const body = await req.json();
-      const parsedBody = newItemSchema.parse(body);
+      const parsedBody = newItemSchema.array().parse(body);
       const newItem = await db.insert(items).values(parsedBody).returning();
 
       expireTag("items");

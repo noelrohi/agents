@@ -6,14 +6,14 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     DATABASE_AUTH_TOKEN: z.string().min(1),
     EXA_API_KEY: z.string().min(1),
+    OPENAI_API_KEY: z.string().min(1),
+    UNKEY_API_KEY: z.string().min(1),
   },
   client: {
-    // Add client-side environment variables here if needed
+    NEXT_PUBLIC_APP_URL: z.string().url(),
   },
-  runtimeEnv: {
-    DATABASE_URL: process.env.DATABASE_URL,
-    DATABASE_AUTH_TOKEN: process.env.DATABASE_AUTH_TOKEN,
-    EXA_API_KEY: process.env.EXA_API_KEY,
+  experimental__runtimeEnv: {
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,
