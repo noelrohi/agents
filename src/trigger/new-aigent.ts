@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai";
-import { logger, task } from "@trigger.dev/sdk/v3";
+import { logger, schedules } from "@trigger.dev/sdk/v3";
 import { generateObject } from "ai";
 import Exa from "exa-js";
 import { MemoryClient } from "mem0ai";
@@ -36,10 +36,12 @@ async function generateAigent(contents: string) {
   return object.aigents;
 }
 
-export const newAigent = task({
+export const newAigent = schedules.task({
   id: "new-aigent",
-  run: async ({ user_id }: { user_id: string }) => {
+  cron: "4 0 * * *",
+  run: async (payload) => {
     logger.log("Getting memories");
+    const user_id = payload.externalId ?? "chrome-extension-user";
     const memories = await memory.getAll({
       user_id,
     });
