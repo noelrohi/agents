@@ -38,10 +38,13 @@ async function generateAigent(contents: string) {
 
 export const newAigent = schedules.task({
   id: "new-aigent",
-  cron: "4 0 * * *",
   run: async (payload) => {
+    if (!payload.externalId) {
+      logger.log("No externalId provided");
+      return;
+    }
     logger.log("Getting memories");
-    const user_id = payload.externalId ?? "chrome-extension-user";
+    const user_id = payload.externalId;
     const memories = await memory.getAll({
       user_id,
     });
