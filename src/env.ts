@@ -8,6 +8,7 @@ export const env = createEnv({
     EXA_API_KEY: z.string().min(1),
     OPENAI_API_KEY: z.string().min(1),
     UNKEY_API_KEY: z.string().min(1),
+    MEM0AI_API_KEY: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),

@@ -3,7 +3,14 @@ import { openai } from "@ai-sdk/openai";
 import { logger, task } from "@trigger.dev/sdk/v3";
 import { generateObject } from "ai";
 import Exa from "exa-js";
+import { MemoryClient } from "mem0ai";
 import { z } from "zod";
+
+const memory = new MemoryClient({
+  apiKey: env.MEM0AI_API_KEY,
+  organizationId: "org_SGiY8gY3JfiKggF3zuWHLU11BrVToShuCho0iiAa",
+  projectId: "proj_iDX2o22tG7gv357Ku8RkOg5DGahVtviH6Hs62OaM",
+});
 
 const exa = new Exa(env.EXA_API_KEY);
 
@@ -32,8 +39,16 @@ async function generateAigent(contents: string) {
 
 export const newAigent = task({
   id: "new-aigent",
-  run: async ({ urls }: { urls: string[] }) => {
+  run: async ({ user_id }: { user_id: string }) => {
+    logger.log("Getting memories");
+    const memories = await memory.getAll({
+      user_id,
+    });
+    logger.log(JSON.stringify({ memories }, null, 2));
     logger.log("Getting contents using EXA");
+    const urls = memories
+      .map((m) => m.memory)
+      .filter((m) => m !== undefined) as string[];
     const exaContents = await exa.getContents(urls, {
       text: true,
     });
@@ -52,6 +67,10 @@ export const newAigent = task({
     });
     const data = await response.json();
     logger.log(JSON.stringify(data, null, 2));
+    logger.log("Deleting memories");
+    await memory.deleteAll({
+      user_id,
+    });
     return data;
   },
 });
