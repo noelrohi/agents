@@ -1,4 +1,3 @@
-import { env } from "@/env";
 import { openai } from "@ai-sdk/openai";
 import { logger, task } from "@trigger.dev/sdk/v3";
 import { generateObject } from "ai";
@@ -7,12 +6,12 @@ import { MemoryClient } from "mem0ai";
 import { z } from "zod";
 
 const memory = new MemoryClient({
-  apiKey: env.MEM0AI_API_KEY,
+  apiKey: process.env.MEM0AI_API_KEY!,
   organizationId: "org_SGiY8gY3JfiKggF3zuWHLU11BrVToShuCho0iiAa",
   projectId: "proj_iDX2o22tG7gv357Ku8RkOg5DGahVtviH6Hs62OaM",
 });
 
-const exa = new Exa(env.EXA_API_KEY);
+const exa = new Exa(process.env.EXA_API_KEY!);
 
 async function generateAigent(contents: string) {
   const prompt = `Generate new aigents with the following contents: ${contents}`;
@@ -57,11 +56,11 @@ export const newAigent = task({
     const aigents = await generateAigent(JSON.stringify(exaContents.results));
     logger.log(JSON.stringify({ aigents }, null, 2));
     logger.log("Inserting data into database");
-    const response = await fetch(`${env.NEXT_PUBLIC_APP_URL}/api/new`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${env.UNKEY_API_KEY}`,
+        Authorization: `Bearer ${process.env.UNKEY_API_KEY}`,
       },
       body: JSON.stringify(aigents),
     });
