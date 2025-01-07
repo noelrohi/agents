@@ -1,14 +1,23 @@
 "use client";
 
+import { refreshAgents } from "@/app/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { CategoryGroup } from "@/data";
-import { ExternalLink, InfoIcon, Search, Sparkles } from "lucide-react";
+import {
+  ExternalLink,
+  InfoIcon,
+  RefreshCcw,
+  Search,
+  Sparkles,
+} from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { Button } from "./ui/button";
 
 export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
   const [search, setSearch] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   const filteredCategories = categories.map((category) => ({
     ...category,
@@ -30,24 +39,37 @@ export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
   }));
 
   return (
-    <main className="flex-1 p-6">
-      <div className="mb-8">
-        <div className="relative max-w-lg mb-8">
+    <main className="flex-1 p-6 space-y-6">
+      <div className="flex gap-4 items-center">
+        <div className="relative max-w-xl">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search by name, description, category, or tags..."
-            className="pl-10"
+            className="pl-10 min-w-96"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        {filteredCategories.length === 0 && search && (
-          <p className="text-sm flex items-center gap-2">
-            <InfoIcon className="size-5 inline-block text-orange-500" />
-            No results found for "{search}".
-          </p>
-        )}
+        <Button
+          onClick={() =>
+            startTransition(async () => {
+              await refreshAgents();
+            })
+          }
+          className="size-7"
+          variant="outline"
+          disabled={isPending}
+          size="icon"
+        >
+          <RefreshCcw className="size-4" />
+        </Button>
       </div>
+      {filteredCategories.length === 0 && search && (
+        <p className="text-sm flex items-center gap-2">
+          <InfoIcon className="size-5 inline-block text-orange-500" />
+          No results found for "{search}".
+        </p>
+      )}
 
       {filteredCategories
         .filter((category) => category.items.length > 0)
