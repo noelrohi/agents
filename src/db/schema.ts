@@ -19,6 +19,7 @@ export const items = sqliteTable(
       .integer()
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
+    isNew: t.integer({ mode: "boolean" }).default(false),
     updatedAt: t
       .integer()
       .notNull()

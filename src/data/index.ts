@@ -1,7 +1,5 @@
 import { db } from "@/db";
 import { Item } from "@/db/schema";
-import { UTCDate } from "@date-fns/utc";
-import { isSameDay } from "date-fns";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export interface CategoryGroup {
@@ -23,32 +21,20 @@ export async function getCategorizedItems(
     orderBy: (table, { desc }) => [desc(table.createdAt)],
   });
 
-  const now = new UTCDate(new UTCDate().getTime() + 1000 * 60 * 60 * 24);
-  const yesterday = new UTCDate(now.getTime() - 24 * 60 * 60 * 1000);
-
-  // Split items into new arrivals and the rest
-  const newArrivals: Item[] = [];
-  const otherItems: Item[] = [];
-
-  result.forEach((item) => {
-    const createdAt = new UTCDate(item.createdAt).getTime();
-    if (isSameDay(createdAt, yesterday) || isSameDay(createdAt, now)) {
-      newArrivals.push(item);
-    } else {
-      otherItems.push(item);
-    }
-  });
-
-  return [
+  const categories: CategoryGroup[] = [
     {
-      id: "new",
+      id: "new-arrivals",
       name: "New Arrivals",
-      items: newArrivals,
+      items: result.filter((item) => item.isNew),
     },
     {
-      id: "all",
+      id: "all-items",
       name: "All Items",
-      items: otherItems,
+      items: result.filter((item) => !item.isNew),
     },
   ];
+
+  console.log(categories);
+
+  return categories;
 }

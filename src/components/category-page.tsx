@@ -4,15 +4,10 @@ import { refreshAgents } from "@/app/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { CategoryGroup } from "@/data";
-import {
-  ExternalLink,
-  InfoIcon,
-  RefreshCcw,
-  Search,
-  Sparkles,
-} from "lucide-react";
+import { ExternalLink, InfoIcon, RefreshCcw, Search } from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 
 export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
@@ -85,10 +80,13 @@ export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
               >
                 <div className="flex flex-col justify-between h-full space-y-4">
                   <div className="space-y-2 flex-grow">
-                    <h3 className="flex items-center gap-2 font-semibold tracking-tight">
-                      {agent.name}
-                      <ExternalLink className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
-                    </h3>
+                    <div className="flex justify-between items-center">
+                      <h3 className="flex items-center gap-2 font-semibold tracking-tight">
+                        {agent.name}
+                        <ExternalLink className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
+                      </h3>
+                      {agent.isNew && <Badge variant="secondary">New</Badge>}
+                    </div>
                     <p className="text-sm text-muted-foreground">
                       {agent.description}
                     </p>
