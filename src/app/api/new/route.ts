@@ -1,9 +1,10 @@
 import { db } from "@/db";
 import { items } from "@/db/schema";
 import { withUnkey } from "@unkey/nextjs";
+import { eq } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
 import { unstable_expireTag as expireTag } from "next/cache";
+import { z } from "zod";
 
 const newItemSchema = createInsertSchema(items, {
   tags: z.array(z.string()),
@@ -21,7 +22,26 @@ export const POST = withUnkey(
     try {
       const body = await req.json();
       const parsedBody = newItemSchema.array().parse(body);
-      const newItem = await db.insert(items).values(parsedBody).returning();
+      const newItem = await db.transaction(async (tx) => {
+        // Set yesterday's items to isNew = false
+        await db
+          .update(items)
+          .set({
+            isNew: false,
+          })
+          .where(eq(items.isNew, true));
+        // Set today's items to isNew = true
+        const newItem = await tx
+          .insert(items)
+          .values(
+            parsedBody.map((i) => ({
+              ...i,
+              isNew: true,
+            })),
+          )
+          .returning();
+        return newItem;
+      });
 
       expireTag("items");
       return Response.json(newItem);
