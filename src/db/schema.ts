@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable } from "drizzle-orm/sqlite-core";
 
 export const items = sqliteTable(
   "items",
@@ -26,3 +26,5 @@ export const items = sqliteTable(
   }),
   () => [],
 );
+
+export type Item = typeof items.$inferSelect;

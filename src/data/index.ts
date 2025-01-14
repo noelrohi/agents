@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { items } from "@/db/schema";
+import { Item } from "@/db/schema";
 import { UTCDate } from "@date-fns/utc";
 import { isSameDay } from "date-fns";
 import { unstable_cacheTag as cacheTag } from "next/cache";
@@ -7,7 +7,7 @@ import { unstable_cacheTag as cacheTag } from "next/cache";
 export interface CategoryGroup {
   id: string;
   name: string;
-  items: (typeof items.$inferSelect)[];
+  items: Item[];
 }
 
 type ItemType = "agent" | "tool";
@@ -27,8 +27,8 @@ export async function getCategorizedItems(
   const yesterday = new UTCDate(now.getTime() - 24 * 60 * 60 * 1000);
 
   // Split items into new arrivals and the rest
-  const newArrivals: (typeof items.$inferSelect)[] = [];
-  const otherItems: (typeof items.$inferSelect)[] = [];
+  const newArrivals: Item[] = [];
+  const otherItems: Item[] = [];
 
   result.forEach((item) => {
     const createdAt = new UTCDate(item.createdAt).getTime();
