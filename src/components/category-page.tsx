@@ -31,7 +31,7 @@ export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
         // Search in category
         category.name.toLowerCase().includes(searchLower) ||
         // Search in tags
-        JSON.parse(item.tags).some((tag: string) =>
+        item.tags?.some((tag: string) =>
           tag.toLowerCase().includes(searchLower),
         )
       );
@@ -44,7 +44,7 @@ export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
         <div className="relative max-w-xl">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search by name, description, category, or tags..."
+            placeholder="Search by name, description, tags..."
             className="pl-10 min-w-96"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -71,76 +71,54 @@ export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
         </p>
       )}
 
-      {filteredCategories
-        .filter((category) => category.items.length > 0)
-        .map((category) => (
-          <div key={category.id} className="mb-12" id={category.id}>
-            <div className="mb-8">
-              <h1 className="text-2xl font-semibold font-heading tracking-tight flex items-center gap-2">
-                {category.name.charAt(0).toUpperCase() +
-                  category.name.slice(1).replace("-", " ")}
-                {category.id === "new" && (
-                  <Sparkles className="h-5 w-5 text-yellow-500" />
-                )}
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                {category.id === "new"
-                  ? "Discover the latest additions from the past 24 hours"
-                  : `Explore the best ${category.name.toLowerCase()} tools and platforms.`}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {category.items.map((agent) => (
-                <Link
-                  key={agent.name}
-                  href={agent.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative rounded-lg border p-6 hover:bg-muted/50"
-                >
-                  <div className="flex flex-col justify-between h-full space-y-4">
-                    <div className="space-y-2 flex-grow">
-                      <h3 className="flex items-center gap-2 font-semibold tracking-tight">
-                        {agent.name}
-                        <ExternalLink className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {agent.description}
-                      </p>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex flex-wrap gap-2">
-                        {JSON.parse(agent.tags)
-                          .slice(0, 2)
-                          .map((tag: string) => (
-                            <span
-                              key={tag}
-                              className="text-xs text-muted-foreground font-mono"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        {JSON.parse(agent.tags).length > 2 && (
-                          <span className="text-xs text-muted-foreground">
-                            +{JSON.parse(agent.tags).length - 2} more
-                          </span>
-                        )}
-                      </div>
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage
-                          src={agent.avatar ?? ""}
-                          alt={agent.name}
-                        />
-                        <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                    </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {filteredCategories
+          .filter((category) => category.items.length > 0)
+          .flatMap((category) =>
+            category.items.map((agent) => (
+              <Link
+                key={`${category.id}-${agent.name}`}
+                href={agent.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative rounded-lg border p-6 hover:bg-muted/50"
+              >
+                <div className="flex flex-col justify-between h-full space-y-4">
+                  <div className="space-y-2 flex-grow">
+                    <h3 className="flex items-center gap-2 font-semibold tracking-tight">
+                      {agent.name}
+                      <ExternalLink className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {agent.description}
+                    </p>
                   </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        ))}
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-2">
+                      {(agent.tags ?? []).slice(0, 2).map((tag: string) => (
+                        <span
+                          key={tag}
+                          className="text-xs text-muted-foreground font-mono"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {agent.tags?.length && agent.tags.length > 2 && (
+                        <span className="text-xs text-muted-foreground">
+                          +{agent.tags.length - 2} more
+                        </span>
+                      )}
+                    </div>
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={agent.avatar ?? ""} alt={agent.name} />
+                      <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                  </div>
+                </div>
+              </Link>
+            )),
+          )}
+      </div>
     </main>
   );
 }

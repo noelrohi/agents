@@ -1,23 +1,13 @@
 import { db } from "@/db";
 import { items } from "@/db/schema";
 import { UTCDate } from "@date-fns/utc";
-import { eq, sql } from "drizzle-orm";
 import { isSameDay } from "date-fns";
 import { unstable_cacheTag as cacheTag } from "next/cache";
-
-interface CategoryItem {
-  name: string;
-  description: string;
-  tags: string;
-  avatar: string | null;
-  href: string;
-  createdAt: string;
-}
 
 export interface CategoryGroup {
   id: string;
   name: string;
-  items: CategoryItem[];
+  items: (typeof items.$inferSelect)[];
 }
 
 type ItemType = "agent" | "tool";
@@ -27,48 +17,38 @@ export async function getCategorizedItems(
 ): Promise<CategoryGroup[]> {
   "use cache";
   cacheTag("items");
-  const result = await db
-    .select({
-      category: items.category,
-      items: sql<string>`json_group_array(
-      json_object(
-        'name', ${items.name},
-        'description', ${items.description},
-        'tags', ${items.tags},
-        'avatar', ${items.avatar},
-        'href', ${items.href},
-        'createdAt', ${items.createdAt}
-      )
-    )`.as("items"),
-    })
-    .from(items)
-    .where(eq(items.type, type))
-    .groupBy(items.category)
-    .orderBy(items.category)
-    .execute();
+
+  const result = await db.query.items.findMany({
+    where: (table, { eq }) => eq(table.type, type),
+    orderBy: (table, { desc }) => [desc(table.createdAt)],
+  });
 
   const now = new UTCDate(new UTCDate().getTime() + 1000 * 60 * 60 * 24);
   const yesterday = new UTCDate(now.getTime() - 24 * 60 * 60 * 1000);
-  const itemResults = result.flatMap(
-    (row) => JSON.parse(row.items) as CategoryItem[],
-  );
 
-  const newCategory: CategoryGroup = {
-    id: "new",
-    name: "New Arrivals",
-    items: itemResults.filter((item) => {
-      console.log(new UTCDate(item.createdAt), now, item.name);
-      const createdAt = new UTCDate(item.createdAt).getTime();
-      return isSameDay(createdAt, yesterday) || isSameDay(createdAt, now);
-    }),
-  };
+  // Split items into new arrivals and the rest
+  const newArrivals: (typeof items.$inferSelect)[] = [];
+  const otherItems: (typeof items.$inferSelect)[] = [];
 
-  const categoryGroups = result.map(
-    (row): CategoryGroup => ({
-      id: row.category,
-      name: row.category,
-      items: JSON.parse(row.items) as CategoryItem[],
-    }),
-  );
-  return [newCategory, ...categoryGroups];
+  result.forEach((item) => {
+    const createdAt = new UTCDate(item.createdAt).getTime();
+    if (isSameDay(createdAt, yesterday) || isSameDay(createdAt, now)) {
+      newArrivals.push(item);
+    } else {
+      otherItems.push(item);
+    }
+  });
+
+  return [
+    {
+      id: "new",
+      name: "New Arrivals",
+      items: newArrivals,
+    },
+    {
+      id: "all",
+      name: "All Items",
+      items: otherItems,
+    },
+  ];
 }
