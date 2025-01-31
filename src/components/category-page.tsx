@@ -4,7 +4,13 @@ import { refreshAgents } from "@/app/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { CategoryGroup } from "@/data";
-import { ExternalLink, InfoIcon, RefreshCcw, Search } from "lucide-react";
+import {
+  ExternalLink,
+  InfoIcon,
+  RefreshCcw,
+  Search,
+  Youtube,
+} from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { Badge } from "./ui/badge";
@@ -83,9 +89,24 @@ export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
                     <div className="flex justify-between items-center">
                       <h3 className="flex items-center gap-2 font-semibold tracking-tight">
                         {agent.name}
-                        <ExternalLink className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
+                        <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                          <ExternalLink className="h-3 w-3" />
+                        </div>
                       </h3>
-                      {agent.isNew && <Badge variant="secondary">New</Badge>}
+                      <div className="flex items-center gap-2">
+                        {agent.demoVideo && (
+                          <Link
+                            href={agent.demoVideo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-red-500"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Youtube className="size-6 text-red-500" />
+                          </Link>
+                        )}
+                        {agent.isNew && <Badge variant="secondary">New</Badge>}
+                      </div>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {agent.description}
