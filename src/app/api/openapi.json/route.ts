@@ -3,8 +3,8 @@ import { type OpenAPIV3_1 } from "openapi-types";
 const openApiSpec: OpenAPIV3_1.Document = {
   openapi: "3.1.0",
   info: {
-    title: "Aigent Directory API",
-    description: "API for managing AI tools and agents directory",
+    title: "Agents Directory API",
+    description: "API for managing AI agents directory",
     version: "1.0.0",
   },
   servers: [
