@@ -9,7 +9,7 @@ const openApiSpec: OpenAPIV3_1.Document = {
   },
   servers: [
     {
-      url: "https://aigent.rohi.dev/api",
+      url: "https://agents.noelrohi.com/api",
       description: "Production server",
     },
     {
