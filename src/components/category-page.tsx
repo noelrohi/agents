@@ -4,13 +4,7 @@ import { refreshAgents } from "@/app/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { CategoryGroup } from "@/data";
-import {
-  ExternalLink,
-  InfoIcon,
-  RefreshCcw,
-  Search,
-  Youtube,
-} from "lucide-react";
+import { InfoIcon, RefreshCcw, Search } from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { Badge } from "./ui/badge";
@@ -79,59 +73,33 @@ export function CategoryPage({ categories }: { categories: CategoryGroup[] }) {
             category.items.map((agent) => (
               <Link
                 key={`${category.id}-${agent.name}`}
-                href={agent.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`a/${agent.id}`}
                 className="group relative rounded-lg border p-6 hover:bg-muted/50"
               >
                 <div className="flex flex-col justify-between h-full space-y-4">
                   <div className="space-y-2 flex-grow">
                     <div className="flex justify-between items-center">
-                      <h3 className="flex items-center gap-2 font-semibold tracking-tight">
-                        {agent.name}
-                        <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                          <ExternalLink className="h-3 w-3" />
-                        </div>
-                      </h3>
                       <div className="flex items-center gap-2">
-                        {agent.demoVideo && (
-                          <Link
-                            href={agent.demoVideo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-red-500"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Youtube className="size-6 text-red-500" />
-                          </Link>
-                        )}
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage
+                            src={agent.avatar ?? ""}
+                            alt={agent.name}
+                          />
+                          <AvatarFallback>
+                            {agent.name.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <h3 className="flex items-center gap-2 font-semibold tracking-tight">
+                          {agent.name}
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2">
                         {agent.isNew && <Badge variant="secondary">New</Badge>}
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {agent.description}
                     </p>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-2">
-                      {(agent.tags ?? []).slice(0, 2).map((tag: string) => (
-                        <span
-                          key={tag}
-                          className="text-xs text-muted-foreground font-mono"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      {agent.tags?.length && agent.tags.length > 2 && (
-                        <span className="text-xs text-muted-foreground">
-                          +{agent.tags.length - 2} more
-                        </span>
-                      )}
-                    </div>
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={agent.avatar ?? ""} alt={agent.name} />
-                      <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
                   </div>
                 </div>
               </Link>

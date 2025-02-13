@@ -51,4 +51,23 @@ Key Conventions
   - Use only for Web API access in small components.
   - Avoid for data fetching or state management.
 
+Git Commit Messages
+
+- Use conventional commit format: <type>(<scope>): <description>
+- Types:
+  - feat: New features
+  - fix: Bug fixes
+  - chore: Maintenance tasks
+  - docs: Documentation changes
+  - style: Code style changes
+  - refactor: Code refactoring
+  - test: Adding or modifying tests
+  - perf: Performance improvements
+- Keep descriptions concise and imperative
+- Use scope to indicate affected component/module
+- Examples:
+  - feat(auth): add google oauth support
+  - fix(api): resolve rate limiting issue
+  - chore(deps): update dependencies
+
 Follow Next.js docs for Data Fetching, Rendering, and Routing.
