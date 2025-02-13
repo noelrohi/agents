@@ -2,11 +2,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { getItem } from "@/data";
 import { db } from "@/db";
 import { items } from "@/db/schema";
 import { getEmbedUrl } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { ExternalLink, Youtube } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -16,11 +18,9 @@ interface Props {
   }>;
 }
 
-export async function generateMetadata(props: Props) {
+export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
-  const item = await db.query.items.findFirst({
-    where: eq(items.id, Number.parseInt(params.id)),
-  });
+  const item = await getItem(Number.parseInt(params.id));
 
   if (!item) {
     return {
@@ -31,6 +31,10 @@ export async function generateMetadata(props: Props) {
   return {
     title: `${item.name} - ${item.type === "agent" ? "Agent" : "Tool"}`,
     description: item.description,
+    openGraph: {
+      title: `${item.name} - ${item.type === "agent" ? "Agent" : "Tool"}`,
+      description: item.description,
+    },
   };
 }
 

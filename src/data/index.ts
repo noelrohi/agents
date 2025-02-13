@@ -38,3 +38,11 @@ export async function getCategorizedItems(
 
   return categories;
 }
+
+export async function getItem(id: number): Promise<Item | undefined> {
+  const item = await db.query.items.findFirst({
+    where: (table, { eq }) => eq(table.id, id),
+  });
+
+  return item;
+}
