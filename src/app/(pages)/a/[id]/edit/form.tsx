@@ -183,7 +183,6 @@ export default function EditForm({ item, id }: EditPageProps) {
                   </FormItem>
                 )}
               />
-              {JSON.stringify(form.formState.errors)}
               <div className="flex justify-end">
                 <Button type="submit" disabled={isPending}>
                   {isPending ? "Saving..." : "Save Changes"}
