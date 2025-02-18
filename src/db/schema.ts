@@ -15,16 +15,10 @@ export const items = sqliteTable(
       .text({ enum: ["agent", "tool"] })
       .notNull()
       .default("tool"),
-    createdAt: t
-      .integer()
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+    createdAt: t.integer().default(sql`CURRENT_TIMESTAMP`),
     demoVideo: t.text(),
     isNew: t.integer({ mode: "boolean" }).default(false),
-    updatedAt: t
-      .integer()
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: t.integer().default(sql`CURRENT_TIMESTAMP`),
   }),
   () => [],
 );

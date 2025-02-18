@@ -9,6 +9,7 @@ export const env = createEnv({
     OPENAI_API_KEY: z.string().min(1),
     UNKEY_API_KEY: z.string().min(1),
     MEM0AI_API_KEY: z.string().min(1),
+    EDIT_MODE: z.coerce.boolean().default(false),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),

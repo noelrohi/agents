@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getItem } from "@/data";
 import { db } from "@/db";
 import { items } from "@/db/schema";
+import { editFlag } from "@/flags";
 import { getEmbedUrl } from "@/lib/utils";
 import { eq } from "drizzle-orm";
 import { ExternalLink, Youtube } from "lucide-react";
@@ -40,9 +41,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 export default async function ItemPage(props: Props) {
   const params = await props.params;
-  const item = await db.query.items.findFirst({
-    where: eq(items.id, Number.parseInt(params.id)),
-  });
+  const [item, canEdit] = await Promise.all([
+    db.query.items.findFirst({
+      where: eq(items.id, Number.parseInt(params.id)),
+    }),
+    editFlag(),
+  ]);
 
   if (!item) {
     notFound();
@@ -138,6 +142,11 @@ export default async function ItemPage(props: Props) {
             ← Back to {item.type === "agent" ? "Agents" : "Tools"}
           </Link>
         </Button>
+        {canEdit && (
+          <Button variant="outline" asChild>
+            <Link href={`/a/${item.id}/edit`}>Edit</Link>
+          </Button>
+        )}
       </div>
     </main>
   );
