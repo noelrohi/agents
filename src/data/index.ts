@@ -34,8 +34,6 @@ export async function getCategorizedItems(
     },
   ];
 
-  console.log(categories);
-
   return categories;
 }
 
