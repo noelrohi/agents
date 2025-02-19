@@ -191,6 +191,26 @@ export default function UpsertAgentForm({ item, id }: EditPageProps) {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="isNew"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">New Badge</FormLabel>
+                      <FormDescription>
+                        Show a "New" badge on this item
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value ?? true}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
               <TagsFormField />
               <WhoIsItForFormField />
               <KeyBenefitsFormField />
@@ -220,6 +240,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { Checkbox } from "../ui/checkbox";
 
 function AutofillDialog() {
   const form = useFormContext<z.infer<typeof insertItemSchema>>();

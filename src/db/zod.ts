@@ -3,8 +3,8 @@ import {
   createSelectSchema,
   createUpdateSchema,
 } from "drizzle-zod";
-import { items, features } from "./schema";
 import { z } from "zod";
+import { features, items } from "./schema";
 
 export const selectItemSchema = createSelectSchema(items);
 
@@ -27,7 +27,6 @@ export const insertItemSchema = createInsertSchema(items, {
     id: true,
     createdAt: true,
     updatedAt: true,
-    isNew: true,
   });
 
 export const updateItemSchema = createUpdateSchema(items, {
