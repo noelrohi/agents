@@ -1,6 +1,7 @@
 import { ThemeProvider } from "next-themes";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,6 +31,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
+        {/* rest of your scripts go under */}
+      </head>
       <body
         className={`${fontSans.variable} ${fontMono.variable} ${fontHeading.variable} font-sans antialiased`}
       >
@@ -40,6 +45,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className="min-h-screen bg-background">{children}</main>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

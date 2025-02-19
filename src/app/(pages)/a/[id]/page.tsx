@@ -1,17 +1,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { VideoPlayerProvider } from "@/components/video-player";
+import { VideoTimestampButton } from "@/components/video-timestamp-button";
 import { getItem } from "@/data";
-import { db } from "@/db";
-import { items } from "@/db/schema";
 import { editFlag } from "@/flags";
-import { getEmbedUrl } from "@/lib/utils";
-import { eq } from "drizzle-orm";
 import { ExternalLink, Youtube } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FeatureList } from "@/components/feature-list";
 
 interface Props {
   params: Promise<{
@@ -42,9 +41,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function ItemPage(props: Props) {
   const params = await props.params;
   const [item, canEdit] = await Promise.all([
-    db.query.items.findFirst({
-      where: eq(items.id, Number.parseInt(params.id)),
-    }),
+    getItem(Number.parseInt(params.id)),
     editFlag(),
   ]);
 
@@ -53,91 +50,124 @@ export default async function ItemPage(props: Props) {
   }
 
   return (
-    <main className="container mx-auto py-6 space-y-8">
-      <div className="flex items-start justify-between">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-semibold tracking-tight flex items-center gap-4">
-            {item.name}
+    <main className="container mx-auto py-6 max-w-4xl">
+      {/* Header Section */}
+      <div className="flex items-start justify-between mb-8">
+        <div className="space-y-3">
+          <div className="flex items-center gap-4">
+            <h1 className="text-4xl font-bold tracking-tight">{item.name}</h1>
             {item.isNew && <Badge variant="secondary">New</Badge>}
-          </h1>
-          <p className="text-muted-foreground">{item.description}</p>
+          </div>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            {item.description}
+          </p>
+          <div className="flex gap-4 pt-2">
+            <Button asChild variant="default">
+              <Link
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                Visit {item.type === "agent" ? "Agent" : "Tool"}
+                <ExternalLink className="h-4 w-4" />
+              </Link>
+            </Button>
+            {item.demoVideo && (
+              <Button asChild variant="secondary">
+                <Link
+                  href={item.demoVideo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2"
+                >
+                  Watch Demo
+                  <Youtube className="h-4 w-4" />
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
-        <Avatar className="h-16 w-16">
+        <Avatar className="h-20 w-20">
           <AvatarImage src={item.avatar ?? ""} alt={item.name} />
           <AvatarFallback>{item.name.charAt(0)}</AvatarFallback>
         </Avatar>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-lg font-semibold mb-2">Links</h2>
-                <div className="space-y-2">
-                  <Link
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm hover:underline"
-                  >
-                    Visit {item.type === "agent" ? "Agent" : "Tool"}
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                  {item.demoVideo && (
-                    <Link
-                      href={item.demoVideo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-sm hover:underline text-red-500"
-                    >
-                      Watch Demo
-                      <Youtube className="h-4 w-4" />
-                    </Link>
-                  )}
-                </div>
-              </div>
+      <Separator className="my-8" />
 
-              <div>
-                <h2 className="text-lg font-semibold mb-2">Category</h2>
-                <p className="text-sm text-muted-foreground">{item.category}</p>
+      {/* Main Content */}
+      <div className="space-y-12">
+        {/* Metadata Section */}
+        <section className="grid grid-cols-2 gap-8">
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold">Category</h2>
+            <p className="text-muted-foreground">{item.category}</p>
+          </div>
+          {item.tags && item.tags.length > 0 && (
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold">Tags</h2>
+              <div className="flex flex-wrap gap-2">
+                {item.tags.map((tag) => (
+                  <Badge key={tag} variant="outline">
+                    {tag}
+                  </Badge>
+                ))}
               </div>
-
-              {item.tags && item.tags.length > 0 && (
-                <div>
-                  <h2 className="text-lg font-semibold mb-2">Tags</h2>
-                  <div className="flex flex-wrap gap-2">
-                    {item.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
-          </CardContent>
-        </Card>
+          )}
+        </section>
 
+        {/* Demo Video Section */}
         {item.demoVideo && (
-          <Card>
-            <CardContent className="pt-6">
-              <div className="aspect-video rounded-lg overflow-hidden">
-                <iframe
-                  title="Demo Video"
-                  src={getEmbedUrl(item.demoVideo) ?? ""}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
-                />
-              </div>
-            </CardContent>
-          </Card>
+          <>
+            <section className="space-y-4">
+              <h2 className="text-xl font-semibold">Demo</h2>
+            </section>
+            <VideoPlayerProvider url={item.demoVideo}>
+              {item.features && item.features.length > 0 && (
+                <FeatureList features={item.features} />
+              )}
+            </VideoPlayerProvider>
+          </>
+        )}
+
+        {/* Use Cases Section */}
+        {item.whoIsItFor && item.whoIsItFor.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold">Who is it for?</h2>
+            <ul className="grid gap-3 text-muted-foreground">
+              {item.whoIsItFor?.map((who) => (
+                <li key={who} className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>{who}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
       </div>
 
+      {/* Key Benefits Section */}
+      {item.keybenefits && item.keybenefits.length > 0 && (
+        <section className="space-y-4 mt-4">
+          <h2 className="text-xl font-semibold">Key Benefits</h2>
+          <ul className="grid gap-3 text-muted-foreground">
+            {item.keybenefits?.map((benefit) => (
+              <li key={benefit} className="flex items-start">
+                <span className="mr-2">•</span>
+                <span>{benefit}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <Separator className="my-8" />
+
+      {/* Footer Navigation */}
       <div className="flex justify-between items-center">
-        <Button variant="outline" asChild>
+        <Button variant="ghost" asChild>
           <Link href={`/${item.type === "agent" ? "" : "tools"}`}>
             ← Back to {item.type === "agent" ? "Agents" : "Tools"}
           </Link>

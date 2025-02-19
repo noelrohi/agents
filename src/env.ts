@@ -10,6 +10,9 @@ export const env = createEnv({
     UNKEY_API_KEY: z.string().min(1),
     MEM0AI_API_KEY: z.string().min(1),
     EDIT_MODE: z.coerce.boolean().default(false),
+    NEW_MODE: z.coerce.boolean().default(false),
+    GROQ_API_KEY: z.string().min(1),
+    FIRECRAWL_API_KEY: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),

@@ -7,6 +7,7 @@ import { z } from "zod";
 
 const newItemSchema = createInsertSchema(items, {
   tags: z.array(z.string()),
+  useCases: z.array(z.string()),
 }).omit({
   id: true,
   createdAt: true,
