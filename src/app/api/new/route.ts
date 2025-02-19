@@ -1,18 +1,8 @@
 import { db } from "@/db";
 import { items } from "@/db/schema";
+import { insertItemSchema } from "@/db/zod";
 import { withUnkey } from "@unkey/nextjs";
-import { createInsertSchema } from "drizzle-zod";
 import { unstable_expireTag as expireTag } from "next/cache";
-import { z } from "zod";
-
-const newItemSchema = createInsertSchema(items, {
-  tags: z.array(z.string()),
-  useCases: z.array(z.string()),
-}).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
 
 export const POST = withUnkey(
   async (req) => {
@@ -21,7 +11,7 @@ export const POST = withUnkey(
     }
     try {
       const body = await req.json();
-      const parsedBody = newItemSchema.array().parse(body);
+      const parsedBody = insertItemSchema.array().parse(body);
       const newItem = await db
         .insert(items)
         .values(

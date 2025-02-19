@@ -28,50 +28,88 @@ const openApiSpec: OpenAPIV3_1.Document = {
           content: {
             "application/json": {
               schema: {
-                type: "object",
-                required: [
-                  "name",
-                  "description",
-                  "category",
-                  "href",
-                  "tags",
-                  "type",
-                ],
-                properties: {
-                  name: {
-                    type: "string",
-                    description: "Name of the tool or agent",
-                  },
-                  description: {
-                    type: "string",
-                    description: "Description of the tool or agent",
-                  },
-                  category: {
-                    type: "string",
-                    description: "Category of the tool or agent",
-                  },
-                  href: {
-                    type: "string",
-                    format: "uri",
-                    description: "URL of the tool or agent",
-                  },
-                  avatar: {
-                    type: "string",
-                    format: "uri",
-                    description: "Avatar URL of the tool or agent",
-                  },
-                  tags: {
-                    type: "array",
-                    items: {
+                type: "array",
+                items: {
+                  type: "object",
+                  required: [
+                    "name",
+                    "description",
+                    "category",
+                    "href",
+                    "type",
+                    "keybenefits",
+                    "whoIsItFor",
+                    "features",
+                  ],
+                  properties: {
+                    name: {
                       type: "string",
+                      description: "Name of the tool or agent",
                     },
-                    description: "Tags associated with the tool or agent",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["tool", "agent"],
-                    default: "tool",
-                    description: "Type of the item",
+                    description: {
+                      type: "string",
+                      description: "Description of the tool or agent",
+                    },
+                    category: {
+                      type: "string",
+                      description: "Category of the tool or agent",
+                    },
+                    href: {
+                      type: "string",
+                      format: "uri",
+                      description: "URL of the tool or agent",
+                    },
+                    avatar: {
+                      type: "string",
+                      format: "uri",
+                      description: "Avatar URL of the tool or agent",
+                    },
+                    tags: {
+                      type: "array",
+                      items: {
+                        type: "string",
+                      },
+                      description: "Tags associated with the tool or agent",
+                      nullable: true,
+                    },
+                    type: {
+                      type: "string",
+                      enum: ["tool", "agent"],
+                      default: "tool",
+                      description: "Type of the item",
+                    },
+                    keybenefits: {
+                      type: "array",
+                      items: {
+                        type: "string",
+                      },
+                      description: "Key benefits of the tool or agent",
+                    },
+                    whoIsItFor: {
+                      type: "array",
+                      items: {
+                        type: "string",
+                      },
+                      description: "Target audience for the tool or agent",
+                    },
+                    features: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        required: ["title", "description"],
+                        properties: {
+                          title: {
+                            type: "string",
+                            description: "Feature title",
+                          },
+                          description: {
+                            type: "string",
+                            description: "Feature description",
+                          },
+                        },
+                      },
+                      description: "Features of the tool or agent",
+                    },
                   },
                 },
               },
@@ -111,10 +149,37 @@ const openApiSpec: OpenAPIV3_1.Document = {
                         items: {
                           type: "string",
                         },
+                        nullable: true,
                       },
                       type: {
                         type: "string",
                         enum: ["tool", "agent"],
+                      },
+                      keybenefits: {
+                        type: "array",
+                        items: {
+                          type: "string",
+                        },
+                      },
+                      whoIsItFor: {
+                        type: "array",
+                        items: {
+                          type: "string",
+                        },
+                      },
+                      features: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            title: {
+                              type: "string",
+                            },
+                            description: {
+                              type: "string",
+                            },
+                          },
+                        },
                       },
                       createdAt: {
                         type: "integer",

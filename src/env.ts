@@ -5,10 +5,6 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     DATABASE_AUTH_TOKEN: z.string().min(1),
-    EXA_API_KEY: z.string().min(1),
-    OPENAI_API_KEY: z.string().min(1),
-    UNKEY_API_KEY: z.string().min(1),
-    MEM0AI_API_KEY: z.string().min(1),
     EDIT_MODE: z.coerce.boolean().default(false),
     NEW_MODE: z.coerce.boolean().default(false),
     GROQ_API_KEY: z.string().min(1),
