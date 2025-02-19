@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 
 export const items = sqliteTable(
@@ -18,9 +18,50 @@ export const items = sqliteTable(
     createdAt: t.integer().default(sql`CURRENT_TIMESTAMP`),
     demoVideo: t.text(),
     isNew: t.integer({ mode: "boolean" }).default(false),
-    updatedAt: t.integer().default(sql`CURRENT_TIMESTAMP`),
+    keybenefits: t
+      .text("keybenefits", { mode: "json" })
+      .$type<string[]>()
+      .default([]),
+    whoIsItFor: t
+      .text("whoIsItFor", { mode: "json" })
+      .$type<string[]>()
+      .default([]),
+    updatedAt: t.integer().$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
   }),
   () => [],
 );
 
+export const features = sqliteTable(
+  "features",
+  (t) => ({
+    id: t.integer().primaryKey(),
+    feature: t.text().notNull(),
+    description: t.text().notNull(),
+    timestampStart: t.integer(),
+    timestampEnd: t.integer(),
+    itemId: t
+      .integer()
+      .references(() => items.id, { onDelete: "cascade" })
+      .notNull(),
+    createdAt: t.integer().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: t.integer().$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
+  }),
+  () => [],
+);
+
+export const itemRelations = relations(items, ({ many }) => ({
+  features: many(features),
+}));
+
+export const featureRelations = relations(features, ({ one }) => ({
+  item: one(items, {
+    fields: [features.itemId],
+    references: [items.id],
+  }),
+}));
+
 export type Item = typeof items.$inferSelect;
+
+export interface ItemWithFeatures extends Item {
+  features: (typeof features.$inferSelect)[];
+}

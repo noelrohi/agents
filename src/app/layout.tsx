@@ -1,6 +1,7 @@
 import { ThemeProvider } from "next-themes";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -40,6 +41,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className="min-h-screen bg-background">{children}</main>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

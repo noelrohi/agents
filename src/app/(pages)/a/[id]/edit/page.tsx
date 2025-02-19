@@ -1,6 +1,6 @@
-import { db } from "@/db";
+import UpsertAgentForm from "@/components/forms/upsert-agent";
+import { getItem } from "@/data";
 import { notFound } from "next/navigation";
-import EditForm from "./form";
 
 interface EditPageProps {
   params: Promise<{ id: string }>;
@@ -8,11 +8,9 @@ interface EditPageProps {
 
 export default async function EditPage({ params }: EditPageProps) {
   const { id } = await params;
-  const item = await db.query.items.findFirst({
-    where: (table, { eq }) => eq(table.id, Number.parseInt(id)),
-  });
+  const item = await getItem(Number.parseInt(id));
   if (!item) {
     return notFound();
   }
-  return <EditForm item={item} id={Number.parseInt(id)} />;
+  return <UpsertAgentForm item={item} id={Number.parseInt(id)} />;
 }

@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { Item } from "@/db/schema";
+import { Item, ItemWithFeatures } from "@/db/schema";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 
 export interface CategoryGroup {
@@ -39,9 +39,14 @@ export async function getCategorizedItems(
   return categories;
 }
 
-export async function getItem(id: number): Promise<Item | undefined> {
+export async function getItem(
+  id: number,
+): Promise<ItemWithFeatures | undefined> {
   const item = await db.query.items.findFirst({
     where: (table, { eq }) => eq(table.id, id),
+    with: {
+      features: true,
+    },
   });
 
   return item;
