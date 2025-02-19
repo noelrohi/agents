@@ -54,10 +54,11 @@ export default function UpsertAgentForm({ item, id }: EditPageProps) {
       startTransition(async () => {
         if (id) {
           await updateItem(id, values);
+          router.push(`/a/${id}`);
         } else {
-          await createItem(values);
+          const newItem = await createItem(values);
+          router.push(`/a/${newItem.id}`);
         }
-        router.push(`/a/${id}`);
         router.refresh();
       });
     } catch (error) {
@@ -190,14 +191,14 @@ export default function UpsertAgentForm({ item, id }: EditPageProps) {
                   </FormItem>
                 )}
               />
+              <TagsFormField />
               <WhoIsItForFormField />
               <KeyBenefitsFormField />
               <FeaturesFormField />
-              {JSON.stringify(form.formState.errors)}
               <div className="flex justify-end space-x-2">
                 <AutofillDialog />
                 <Button type="submit" disabled={isPending}>
-                  {isPending ? "Saving..." : "Save Changes"}
+                  {isPending ? "Saving..." : id ? "Save Changes" : "Create"}
                 </Button>
               </div>
             </form>
@@ -225,7 +226,7 @@ function AutofillDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [websiteUrl, setWebsiteUrl] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
   const handleGenerate = () => {
     startTransition(async () => {
@@ -239,17 +240,23 @@ function AutofillDialog() {
         form.setValue("category", website.object.data.category);
         form.setValue("href", website.object.data.href);
         form.setValue("avatar", website.object.data.avatar);
-        form.setValue("keybenefits", video.keybenefits);
-        form.setValue("whoIsItFor", video.whoIsItFor);
         form.setValue(
-          "features",
-          video.features.map((f) => ({
-            feature: f.feature,
-            description: f.description,
-            timestampStart: Math.round(f.timestampStart),
-            timestampEnd: Math.round(f.timestampEnd),
-          })),
+          "tags",
+          website.object.data.tags?.map((t) => t.toLowerCase()) ?? [],
         );
+        if (video) {
+          form.setValue("keybenefits", video.keybenefits);
+          form.setValue("whoIsItFor", video.whoIsItFor);
+          form.setValue(
+            "features",
+            video.features.map((f) => ({
+              feature: f.feature,
+              description: f.description,
+              timestampStart: Math.round(f.timestampStart),
+              timestampEnd: Math.round(f.timestampEnd),
+            })),
+          );
+        }
         setIsOpen(false);
       } catch (error) {
         toast.error(`Failed to autofill item: ${error}`);
@@ -277,7 +284,7 @@ function AutofillDialog() {
             <Input
               id="demoVideo"
               className="col-span-3"
-              value={videoUrl}
+              value={videoUrl ?? ""}
               onChange={(e) => setVideoUrl(e.target.value)}
             />
           </div>
@@ -300,6 +307,58 @@ function AutofillDialog() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function TagsFormField() {
+  const form = useFormContext<z.infer<typeof insertItemSchema>>();
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "tags" as never,
+  });
+
+  return (
+    <FormField
+      control={form.control}
+      name="tags"
+      render={() => (
+        <FormItem>
+          <FormLabel>Tags</FormLabel>
+          <div className="space-y-2">
+            {fields.map((field, index) => (
+              <div key={field.id} className="flex gap-2">
+                <FormControl>
+                  <Input
+                    {...form.register(`tags.${index}`)}
+                    placeholder="Enter a tag"
+                  />
+                </FormControl>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => remove(index)}
+                >
+                  <span className="sr-only">Remove tag</span>✕
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => append("")}
+            >
+              Add Tag
+            </Button>
+          </div>
+          <FormDescription>
+            Add tags to help categorize this item
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }
 

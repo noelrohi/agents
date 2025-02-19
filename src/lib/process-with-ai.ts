@@ -40,6 +40,9 @@ export async function processUrl(
     prompt: formattingPrompt(JSON.stringify(scrapeResponse).slice(0, 6000)),
   });
 
+  console.log({ text });
+  console.log({ reasoning });
+
   const { object } = await generateObject({
     model,
     schema: z.object({

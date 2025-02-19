@@ -7,9 +7,8 @@ import { editFlag } from "@/flags";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { processUrl, processYoutubeUrl } from "@/lib/process-with-ai";
 import { unstable_expireTag as expireTag } from "next/cache";
-import { processUrl } from "@/lib/process-with-ai";
-import { processYoutubeUrl } from "@/lib/process-with-ai";
 
 export async function refreshAgents() {
   expireTag("items");
@@ -41,7 +40,7 @@ export async function updateItem(
 }
 
 export async function createItem(item: z.infer<typeof insertItemSchema>) {
-  await db.transaction(async (tx) => {
+  const newItem = await db.transaction(async (tx) => {
     const [{ id }] = await tx
       .insert(items)
       .values(item)
@@ -55,14 +54,16 @@ export async function createItem(item: z.infer<typeof insertItemSchema>) {
     if (values.length > 0) {
       await tx.insert(features).values(values);
     }
+    return { id };
   });
+  return newItem;
 }
 
 export async function autofillItem({
   videoUrl,
   websiteUrl,
 }: {
-  videoUrl: string;
+  videoUrl: string | null;
   websiteUrl: string;
 }) {
   const canEdit = await editFlag();
@@ -72,7 +73,7 @@ export async function autofillItem({
     });
   }
   const [video, website] = await Promise.all([
-    processYoutubeUrl(videoUrl),
+    videoUrl ? processYoutubeUrl(videoUrl) : null,
     processUrl(websiteUrl),
   ]);
   return {
