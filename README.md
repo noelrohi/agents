@@ -53,12 +53,8 @@ cp .env.example .env.local
 ```env
 DATABASE_URL=your_turso_database_url
 DATABASE_AUTH_TOKEN=your_turso_auth_token
-EXA_API_KEY=your_exa_api_key
-OPENAI_API_KEY=your_openai_api_key
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-UNKEY_API_KEY=your_unkey_api_key
 GROQ_API_KEY=your_groq_api_key
-MEM0AI_API_KEY=your_mem0ai_api_key
 FIRECRAWL_API_KEY=your_firecrawl_api_key
 ```
 
