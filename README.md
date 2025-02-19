@@ -1,18 +1,100 @@
-# aigent.directory
+# agents
 
-A directory of AI agents that can perform tasks without human effort.
+A modern, open-source directory of AI agents built with Next.js 15, featuring a searchable and filterable interface to discover AI agents that can perform tasks autonomously.
 
-## How it works
+## Tech Stack
 
-- Agents are categorized into different categories
-- Each agent has a description, tags, and a link to the agent
-- Users can search for agents by name, description, or tags
-- Users can filter agents by category
+- **Framework**: Next.js 15 (App Router)
+- **Database**: Turso (SQLite, powered by libSQL)
+- **ORM**: Drizzle ORM
+- **Styling**: Tailwind CSS
+- **Components**: shadcn/ui
+- **Form Handling**: React Hook Form + Zod
+- **Package Manager**: pnpm
 
-## Adding an agent
+## Features
 
-To add an agent, you can either:
+- 🔍 Search agents by name, description, or tags
+- 🏷️ Filter agents by categories
+- 🎥 Video demonstration support
+- 🌓 Dark/Light mode
+- 🎨 Modern, responsive UI
+- ⚡ Server-side rendering for optimal performance
+- 🔐 Feature flags for controlled rollouts
 
-- Open a PR to add the agent to the `src/lib/constants.ts` file
-- Open an issue to request adding an agent
-    
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- pnpm (recommended) or npm
+- A Turso database
+- Required API keys (see Environment Variables)
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/noelrohi/agents.git
+cd agents
+```
+
+2. Install dependencies:
+```bash
+pnpm install
+```
+
+3. Copy the example environment file:
+```bash
+cp .env.example .env.local
+```
+
+4. Set up your environment variables in `.env.local`:
+```env
+DATABASE_URL=your_turso_database_url
+DATABASE_AUTH_TOKEN=your_turso_auth_token
+EXA_API_KEY=your_exa_api_key
+OPENAI_API_KEY=your_openai_api_key
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+UNKEY_API_KEY=your_unkey_api_key
+GROQ_API_KEY=your_groq_api_key
+MEM0AI_API_KEY=your_mem0ai_api_key
+FIRECRAWL_API_KEY=your_firecrawl_api_key
+```
+
+5. Initialize the database:
+```bash
+pnpm db push
+```
+
+6. Start the development server:
+```bash
+pnpm dev
+```
+
+Visit `http://localhost:3000` to see your application.
+
+## Feature Flags
+
+The application uses environment variables to control feature flags:
+
+- `EDIT_MODE`: Enable/disable agent editing functionality
+- `NEW_MODE`: Enable/disable creation of new agents
+
+To enable these features, set them to `true` in your `.env.local` file:
+```env
+EDIT_MODE=true
+NEW_MODE=true
+```
+
+## Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm ui` - Add new shadcn/ui components
+- `pnpm fmt` - Format code using Biome
+- `pnpm db` - Run Drizzle Kit commands
+
+## License
+[MIT License](LICENSE.md)
