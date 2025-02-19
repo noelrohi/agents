@@ -2,13 +2,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { VideoPlayerProvider } from "@/components/video-player";
+import { VideoTimestampButton } from "@/components/video-timestamp-button";
 import { getItem } from "@/data";
 import { editFlag } from "@/flags";
-import { getEmbedUrl } from "@/lib/utils";
 import { ExternalLink, Youtube } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FeatureList } from "@/components/feature-list";
 
 interface Props {
   params: Promise<{
@@ -116,56 +118,18 @@ export default async function ItemPage(props: Props) {
           )}
         </section>
 
-        {/* Features Section */}
-        {item.features && item.features.length > 0 && (
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold">Key Features</h2>
-            <div className="grid gap-4">
-              {item.features.map((feature) => (
-                <div
-                  key={feature.id}
-                  className="rounded-lg border p-4 hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex flex-col gap-2">
-                    <h3 className="font-medium">{feature.feature}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {feature.description}
-                    </p>
-                    {feature.timestampStart &&
-                      feature.timestampEnd &&
-                      item.demoVideo && (
-                        <p className="text-sm text-muted-foreground">
-                          <a
-                            href={`${item.demoVideo}&t=${feature.timestampStart}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:underline"
-                          >
-                            {feature.timestampStart}s - {feature.timestampEnd}s
-                          </a>
-                        </p>
-                      )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
         {/* Demo Video Section */}
         {item.demoVideo && (
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold">Demo</h2>
-            <div className="aspect-video rounded-lg overflow-hidden bg-muted">
-              <iframe
-                title="Demo Video"
-                src={getEmbedUrl(item.demoVideo) ?? ""}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              />
-            </div>
-          </section>
+          <>
+            <section className="space-y-4">
+              <h2 className="text-xl font-semibold">Demo</h2>
+            </section>
+            <VideoPlayerProvider url={item.demoVideo}>
+              {item.features && item.features.length > 0 && (
+                <FeatureList features={item.features} />
+              )}
+            </VideoPlayerProvider>
+          </>
         )}
 
         {/* Use Cases Section */}

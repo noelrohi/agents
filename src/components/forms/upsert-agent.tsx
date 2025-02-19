@@ -225,21 +225,23 @@ function AutofillDialog() {
   const form = useFormContext<z.infer<typeof insertItemSchema>>();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [websiteUrl, setWebsiteUrl] = useState("");
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
   const handleGenerate = () => {
     startTransition(async () => {
       try {
         const { website, video } = await autofillItem({
-          videoUrl,
-          websiteUrl,
+          videoUrl: form.getValues("demoVideo") ?? null,
+          websiteUrl: form.getValues("href") ?? null,
         });
         form.setValue("name", website.object.data.name);
         form.setValue("description", website.object.data.description);
         form.setValue("category", website.object.data.category);
-        form.setValue("href", website.object.data.href);
-        form.setValue("avatar", website.object.data.avatar);
+        if (form.getValues("href") === null) {
+          form.setValue("href", website.object.data.href);
+        }
+        if (form.getValues("avatar") === null) {
+          form.setValue("avatar", website.object.data.avatar);
+        }
         form.setValue(
           "tags",
           website.object.data.tags?.map((t) => t.toLowerCase()) ?? [],
@@ -284,8 +286,7 @@ function AutofillDialog() {
             <Input
               id="demoVideo"
               className="col-span-3"
-              value={videoUrl ?? ""}
-              onChange={(e) => setVideoUrl(e.target.value)}
+              {...form.register("demoVideo")}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -295,8 +296,7 @@ function AutofillDialog() {
             <Input
               id="website"
               className="col-span-3"
-              value={websiteUrl}
-              onChange={(e) => setWebsiteUrl(e.target.value)}
+              {...form.register("href")}
             />
           </div>
         </div>
