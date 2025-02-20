@@ -1,30 +1,21 @@
-import "server-only";
-import { createGroq } from "@ai-sdk/groq";
-import FirecrawlApp from "@mendable/firecrawl-js";
-import {
-  LanguageModel,
-  extractReasoningMiddleware,
-  generateObject,
-  generateText,
-  wrapLanguageModel,
-} from "ai";
-import { z } from "zod";
 import { autoFillSystemPrompt, formattingPrompt } from "@/constants/prompts";
-import { YoutubeTranscript } from "youtube-transcript";
 import { insertItemSchema } from "@/db/zod";
-
-const groq = createGroq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+import FirecrawlApp from "@mendable/firecrawl-js";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { LanguageModel, generateObject, generateText } from "ai";
+import "server-only";
+import { YoutubeTranscript } from "youtube-transcript";
+import { z } from "zod";
 
 const firecrawl = new FirecrawlApp({
   apiKey: process.env.FIRECRAWL_API_KEY,
 });
 
-const defaultModel = wrapLanguageModel({
-  model: groq("deepseek-r1-distill-llama-70b"),
-  middleware: extractReasoningMiddleware({ tagName: "think" }),
+const openrouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
 });
+
+const defaultModel = openrouter("google/gemini-2.0-flash-001");
 
 export async function processUrl(
   url: string,
@@ -37,14 +28,15 @@ export async function processUrl(
 
   const { text, reasoning } = await generateText({
     model,
-    prompt: formattingPrompt(JSON.stringify(scrapeResponse).slice(0, 6000)),
+    system: formattingPrompt,
+    prompt: `here is the json object: ${JSON.stringify(scrapeResponse)}`,
   });
 
   console.log({ text });
   console.log({ reasoning });
 
   const { object } = await generateObject({
-    model,
+    model: openrouter("openai/gpt-4o-mini"),
     schema: z.object({
       isValid: z.boolean(),
       data: insertItemSchema.omit({
@@ -90,7 +82,8 @@ export async function processYoutubeUrl(
         (t) =>
           `--- Text: ${t.text} \n Offset: ${t.offset} \n Duration: ${t.duration} ---`,
       )
-      .join("\n")}`,
+      .join("\n")
+      .slice(0, 6000)}`,
   });
 
   return object;

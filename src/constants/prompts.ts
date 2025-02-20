@@ -1,14 +1,6 @@
 import { z } from "zod";
 
-export const formattingPrompt = (
-  jsonObject: string,
-) => `You are an AI assistant specialized in processing and formatting information about AI agents and tools. Your task is to extract specific fields from a provided JSON object and present them in a structured JSON format.
-
-Here's the JSON object you need to process:
-
-<json_object>
-${jsonObject}
-</json_object>
+export const formattingPrompt = `You are an AI assistant specialized in processing and formatting information about AI agents and tools. Your task is to extract specific fields from a provided JSON object and present them in a structured JSON format.
 
 Follow these steps to complete the task:
 

@@ -260,9 +260,9 @@ function AutofillDialog() {
         if (form.getValues("href") === null) {
           form.setValue("href", website.object.data.href);
         }
-        if (form.getValues("avatar") === null) {
-          form.setValue("avatar", website.object.data.avatar);
-        }
+        // if (form.getValues("avatar") === null) {
+        form.setValue("avatar", website.object.data.avatar);
+        // }
         form.setValue(
           "tags",
           website.object.data.tags?.map((t) => t.toLowerCase()) ?? [],

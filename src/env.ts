@@ -7,7 +7,7 @@ export const env = createEnv({
     DATABASE_AUTH_TOKEN: z.string().min(1),
     EDIT_MODE: z.coerce.boolean().default(false),
     NEW_MODE: z.coerce.boolean().default(false),
-    GROQ_API_KEY: z.string().min(1),
+    OPENROUTER_API_KEY: z.string().min(1),
     FIRECRAWL_API_KEY: z.string().min(1),
   },
   client: {
