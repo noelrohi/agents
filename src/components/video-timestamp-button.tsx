@@ -14,7 +14,7 @@ export function VideoTimestampButton({
   start,
   end,
 }: VideoTimestampButtonProps) {
-  const { seekTo } = useVideoPlayer();
+  const { seekTo, scrollToPlayer } = useVideoPlayer();
 
   function formatTime(seconds: number) {
     const minutes = Math.floor(seconds / 60);
@@ -26,7 +26,8 @@ export function VideoTimestampButton({
 
   const handleClick = useCallback(() => {
     seekTo(start, end);
-  }, [seekTo, start, end]);
+    scrollToPlayer();
+  }, [seekTo, scrollToPlayer, start, end]);
 
   return (
     <Button

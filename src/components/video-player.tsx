@@ -18,6 +18,7 @@ const DynamicReactPlayer = dynamic(() => import("react-player/lazy"), {
 
 interface VideoPlayerContextType {
   seekTo: (start: number, end?: number) => void;
+  scrollToPlayer: () => void;
   stopAt?: number;
 }
 
@@ -40,6 +41,7 @@ export function VideoPlayerProvider({
   url,
 }: VideoPlayerProviderProps) {
   const playerRef = useRef<ReactPlayer>(null);
+  const playerContainerRef = useRef<HTMLDivElement>(null);
   const [stopAt, setStopAt] = useState<number>();
   const [playing, setPlaying] = useState(false);
 
@@ -69,15 +71,28 @@ export function VideoPlayerProvider({
     setPlaying(true);
   }, []);
 
+  const scrollToPlayer = useCallback(() => {
+    if (playerContainerRef.current) {
+      playerContainerRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, []);
+
   const contextValue = {
     seekTo,
+    scrollToPlayer,
     stopAt,
   };
 
   return (
     <VideoPlayerContext.Provider value={contextValue}>
       <div className="space-y-8">
-        <div className="aspect-video rounded-lg overflow-hidden bg-muted">
+        <div
+          className="aspect-video rounded-lg overflow-hidden bg-muted"
+          ref={playerContainerRef}
+        >
           <DynamicReactPlayer
             ref={playerRef}
             url={url}
