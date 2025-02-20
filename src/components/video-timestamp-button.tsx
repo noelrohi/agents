@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { PlayCircle } from "lucide-react";
-import { useVideoPlayer } from "./video-player";
 import { useCallback } from "react";
+import { useVideoPlayer } from "./video-player";
 
 interface VideoTimestampButtonProps {
   start: number;
@@ -25,9 +25,9 @@ export function VideoTimestampButton({
   }
 
   const handleClick = useCallback(() => {
-    seekTo(start, end);
+    seekTo(start);
     scrollToPlayer();
-  }, [seekTo, scrollToPlayer, start, end]);
+  }, [seekTo, scrollToPlayer, start]);
 
   return (
     <Button

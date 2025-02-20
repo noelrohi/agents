@@ -124,7 +124,11 @@ export default async function ItemPage(props: Props) {
             <section className="space-y-4">
               <h2 className="text-xl font-semibold">Demo</h2>
             </section>
-            <VideoPlayerProvider url={item.demoVideo}>
+            <VideoPlayerProvider
+              url={item.demoVideo}
+              features={item.features}
+              title={item.name}
+            >
               {item.features && item.features.length > 0 && (
                 <FeatureList features={item.features} />
               )}

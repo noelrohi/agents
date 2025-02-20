@@ -1,25 +1,37 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import {
-  ComponentProps,
+  MediaPlayer,
+  MediaPlayerInstance,
+  MediaProvider,
+  TextTrackInit,
+  Track,
+} from "@vidstack/react";
+import {
+  DefaultVideoLayout,
+  defaultLayoutIcons,
+} from "@vidstack/react/player/layouts/default";
+import "@vidstack/react/player/styles/default/layouts/video.css";
+import "@vidstack/react/player/styles/default/theme.css";
+import {
+  type PropsWithChildren,
   createContext,
   useCallback,
   useContext,
   useRef,
-  useState,
-  type PropsWithChildren,
 } from "react";
-import type ReactPlayer from "react-player";
 
-const DynamicReactPlayer = dynamic(() => import("react-player/lazy"), {
-  ssr: false,
-});
+interface Feature {
+  id: string | number;
+  feature: string;
+  description: string;
+  timestampStart: number | null;
+  timestampEnd: number | null;
+}
 
 interface VideoPlayerContextType {
   seekTo: (start: number, end?: number) => void;
   scrollToPlayer: () => void;
-  stopAt?: number;
 }
 
 const VideoPlayerContext = createContext<VideoPlayerContextType | null>(null);
@@ -34,41 +46,42 @@ export function useVideoPlayer() {
 
 interface VideoPlayerProviderProps extends PropsWithChildren {
   url: string;
+  title: string;
+  features?: Feature[];
 }
 
 export function VideoPlayerProvider({
   children,
   url,
+  title,
+  features,
 }: VideoPlayerProviderProps) {
-  const playerRef = useRef<ReactPlayer>(null);
+  const playerRef = useRef<MediaPlayerInstance>(null);
   const playerContainerRef = useRef<HTMLDivElement>(null);
-  const [stopAt, setStopAt] = useState<number>();
-  const [playing, setPlaying] = useState(false);
 
-  const seekTo = useCallback((start: number, end?: number) => {
-    if (playerRef.current) {
-      playerRef.current.seekTo(start, "seconds");
-      setStopAt(end);
-      setPlaying(true);
-    }
-  }, []);
-
-  const handleProgress = useCallback(
-    ({ playedSeconds }: { playedSeconds: number }) => {
-      if (stopAt && playedSeconds >= stopAt) {
-        setPlaying(false);
-        setStopAt(undefined);
+  // Convert features to VTT chapters format
+  const chapters: TextTrackInit | undefined = features?.length
+    ? {
+        kind: "chapters",
+        label: "Chapters",
+        language: "en",
+        content: features
+          .map(
+            (feature) =>
+              feature.timestampStart &&
+              `${formatVTTTime(feature.timestampStart)} --> ${formatVTTTime(
+                feature.timestampEnd ?? feature.timestampStart + 1,
+              )}\n${feature.feature}`,
+          )
+          .filter(Boolean)
+          .join("\n\n"),
       }
-    },
-    [stopAt],
-  );
+    : undefined;
 
-  const handlePause = useCallback(() => {
-    setPlaying(false);
-  }, []);
-
-  const handlePlay = useCallback(() => {
-    setPlaying(true);
+  const seekTo = useCallback((start: number) => {
+    if (playerRef.current) {
+      playerRef.current.currentTime = start;
+    }
   }, []);
 
   const scrollToPlayer = useCallback(() => {
@@ -83,7 +96,6 @@ export function VideoPlayerProvider({
   const contextValue = {
     seekTo,
     scrollToPlayer,
-    stopAt,
   };
 
   return (
@@ -93,20 +105,46 @@ export function VideoPlayerProvider({
           className="aspect-video rounded-lg overflow-hidden bg-muted"
           ref={playerContainerRef}
         >
-          <DynamicReactPlayer
+          <MediaPlayer
             ref={playerRef}
-            url={url}
-            width="100%"
-            height="100%"
-            controls
-            playing={playing}
-            onProgress={handleProgress}
-            onPause={handlePause}
-            onPlay={handlePlay}
-          />
+            src={url}
+            viewType="video"
+            title={title}
+            crossorigin
+            streamType="on-demand"
+            playsInline
+            className="w-full h-full"
+          >
+            <MediaProvider>
+              {chapters && (
+                <Track
+                  src={`data:text/vtt;base64,${btoa(
+                    `WEBVTT\n\n${chapters.content}`,
+                  )}`}
+                  kind="chapters"
+                  label="Chapters"
+                  default
+                />
+              )}
+            </MediaProvider>
+            <DefaultVideoLayout icons={defaultLayoutIcons} />
+          </MediaPlayer>
         </div>
         {children}
       </div>
     </VideoPlayerContext.Provider>
   );
+}
+
+function formatVTTTime(seconds: number | null): string {
+  if (seconds === null) return "00:00:00.000";
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+  const ms = Math.floor((seconds % 1) * 1000);
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${secs.toString().padStart(2, "0")}.${ms
+    .toString()
+    .padStart(3, "0")}`;
 }
